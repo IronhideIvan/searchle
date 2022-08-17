@@ -8,5 +8,10 @@ namespace Migrations.Core.Errors
     {
 
     }
+
+    public MigrationException(string message, Exception innerException) : base(message, innerException)
+    {
+
+    }
   }
 }

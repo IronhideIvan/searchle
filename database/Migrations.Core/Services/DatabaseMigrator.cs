@@ -1,8 +1,10 @@
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using Dapper;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.Logging;
+using Migrations.Core.Errors;
 using Migrations.Core.Interfaces;
 using Migrations.Core.Models;
 
@@ -49,10 +51,52 @@ namespace Migrations.Core.Services
         {
           foreach (var scriptPath in _config.SetupScripts)
           {
-            var script = await File.ReadAllTextAsync(scriptPath);
-            await cnn.ExecuteAsync(script);
+            string tempPath = scriptPath;
+            bool isGz = false;
+            if (Path.GetExtension(scriptPath).ToLowerInvariant().Equals(".gz"))
+            {
+              tempPath = await Decompress(scriptPath);
+              isGz = true;
+            }
+
+            try
+            {
+              var script = await File.ReadAllTextAsync(tempPath);
+              await cnn.ExecuteAsync(script);
+            }
+            catch (Exception ex)
+            {
+              throw new MigrationException($"Error executing script '{scriptPath}'.\nError: {ex.Message}", ex);
+            }
+            finally
+            {
+              if (isGz)
+              {
+                File.Delete(tempPath);
+              }
+            }
           }
         }
+      }
+    }
+
+    private async Task<string> Decompress(string filepath)
+    {
+      using (FileStream originalFileStream = File.OpenRead(filepath))
+      {
+        string currentFileName = filepath;
+        string newFileName = currentFileName.Remove(currentFileName.Length - Path.GetExtension(filepath).Length);
+
+        using (FileStream decompressedFileStream = File.Create(newFileName))
+        {
+          using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+          {
+            await decompressionStream.CopyToAsync(decompressedFileStream);
+            _logger.LogInformation("Decompressed: {0}", filepath);
+          }
+        }
+
+        return newFileName;
       }
     }
 
