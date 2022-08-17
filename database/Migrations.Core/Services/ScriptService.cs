@@ -6,7 +6,7 @@ using Migrations.Models;
 
 namespace Migrations.Services
 {
-  public class ScriptService : IScriptService
+  internal class ScriptService : IScriptService
   {
     private readonly AppConfig _config;
 
