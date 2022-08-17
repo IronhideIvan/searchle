@@ -1,0 +1,8 @@
+# Local files
+.DS_Store
+
+# C#
+**/bin/**
+**/obj/**
+
+# node

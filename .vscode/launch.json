@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Migrations.Wordnet",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-wordnet-migration",
+            "program": "${workspaceFolder}/database/Migrations.WordNet/bin/Debug/net6.0/Migrations.WordNet.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/database/Migrations.WordNet",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}
