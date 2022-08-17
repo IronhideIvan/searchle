@@ -7,11 +7,19 @@ using Newtonsoft.Json;
 using Migrations.Core.Models;
 using Migrations.Core.Interfaces;
 using Migrations.Core.Services;
+using System.Reflection;
 
 namespace Migrations.Core
 {
   internal sealed class Startup
   {
+    private IEnumerable<Assembly> _migrationAssemblies;
+
+    public Startup(IEnumerable<Assembly> migrationAssemblies)
+    {
+      _migrationAssemblies = migrationAssemblies;
+    }
+
     public void BuildConfig(IConfigurationBuilder builder)
     {
       builder.SetBasePath(Directory.GetCurrentDirectory())
@@ -49,10 +57,17 @@ namespace Migrations.Core
       var dataService = provider.GetService<IDataService>();
 
       services.AddFluentMigratorCore();
-      services.ConfigureRunner(rb => rb
-              .AddPostgres()
-              .WithGlobalConnectionString(dataService.GetConnectionString())
-              .ScanIn(typeof(Startup).Assembly).For.Migrations());
+      services.ConfigureRunner(rb =>
+      {
+        rb.AddPostgres()
+              .WithGlobalConnectionString(dataService.GetConnectionString());
+
+        foreach (var ass in _migrationAssemblies)
+        {
+          rb.ScanIn(ass).For.Migrations();
+        }
+      });
+
       services.AddLogging(lb => lb.AddFluentMigratorConsole());
     }
   }

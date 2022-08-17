@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,11 +10,11 @@ namespace Migrations.Core
 {
   public class Migrator
   {
-    public async Task Run()
+    public async Task Run(params Assembly[] migrationAssemblies)
     {
       try
       {
-        var startup = new Startup();
+        var startup = new Startup(migrationAssemblies);
         var host = startup.AppStartup();
 
         using (var scope = host.Services.CreateScope())
