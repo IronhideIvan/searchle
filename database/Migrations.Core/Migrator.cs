@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Migrations.Services;
+using Migrations.Core.Interfaces;
+using Migrations.Core.Services;
 
-namespace Migrations
+namespace Migrations.Core
 {
-  class Program
+  public class Migrator
   {
-    static async Task Main(string[] args)
+    public async Task Run()
     {
       try
       {
@@ -18,7 +19,7 @@ namespace Migrations
         using (var scope = host.Services.CreateScope())
         {
           var databaseMigrator = scope.ServiceProvider.GetRequiredService<IDataaseMigrator>();
-          var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+          var logger = scope.ServiceProvider.GetRequiredService<ILogger<Migrator>>();
 
           try
           {

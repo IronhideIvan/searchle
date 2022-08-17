@@ -1,6 +1,6 @@
 using System;
 
-namespace Migrations.Errors
+namespace Migrations.Core.Errors
 {
   public class MigrationException : Exception
   {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Migrations.Models
+namespace Migrations.Core.Models
 {
   public class AppSettings
   {
@@ -9,8 +9,9 @@ namespace Migrations.Models
 
   public class AppConfig
   {
-    public IEnumerable<ScriptConfig> Scripts { get; set; }
+    public IEnumerable<string> SetupScripts { get; set; }
     public IEnumerable<DatabaseConnectionConfig> Connections { get; set; }
+    public DatabaseMetadata Metadata { get; set; }
   }
 
   public class DatabaseConnectionConfig
@@ -23,16 +24,9 @@ namespace Migrations.Models
     public string Password { get; set; }
   }
 
-  public class ScriptConfig
+  public class DatabaseMetadata
   {
-    public string Key { get; set; }
-    public string Filepath { get; set; }
-  }
-
-  public enum ScriptKeys
-  {
-    CreateDatabase,
-    CreateTables,
-    SeedData
+    public string Catalog { get; set; }
+    public string Schema { get; set; }
   }
 }

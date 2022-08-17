@@ -3,11 +3,12 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Migrations.Models;
-using Migrations.Services;
 using Newtonsoft.Json;
+using Migrations.Core.Models;
+using Migrations.Core.Interfaces;
+using Migrations.Core.Services;
 
-namespace Migrations
+namespace Migrations.Core
 {
   internal sealed class Startup
   {
@@ -42,7 +43,6 @@ namespace Migrations
       // Services
       services.AddScoped<IDataService, DataService>();
       services.AddScoped<IDataaseMigrator, DatabaseMigrator>();
-      services.AddTransient<IScriptService, ScriptService>();
 
       // Fluent Migrator
       var provider = services.BuildServiceProvider();

@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace Migrations.Services
+namespace Migrations.Core.Interfaces
 {
   public interface IDataService
   {

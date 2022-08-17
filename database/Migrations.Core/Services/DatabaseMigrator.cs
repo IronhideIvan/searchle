@@ -1,16 +1,17 @@
+using System.IO;
 using System.Threading.Tasks;
 using Dapper;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.Logging;
-using Migrations.Models;
+using Migrations.Core.Interfaces;
+using Migrations.Core.Models;
 
-namespace Migrations.Services
+namespace Migrations.Core.Services
 {
   internal sealed class DatabaseMigrator : IDataaseMigrator
   {
     private readonly ILogger<DatabaseMigrator> _logger;
     private readonly IDataService _dataService;
-    private readonly IScriptService _scriptService;
     private readonly IMigrationRunner _migrationRunner;
     private readonly AppConfig _config;
 
@@ -18,13 +19,11 @@ namespace Migrations.Services
     public DatabaseMigrator(
         AppConfig config,
         IDataService dataService,
-        IScriptService scriptService,
         IMigrationRunner migrationRunner,
         ILogger<DatabaseMigrator> logger
         )
     {
       _config = config;
-      _scriptService = scriptService;
       _dataService = dataService;
       _migrationRunner = migrationRunner;
       _logger = logger;
@@ -42,17 +41,17 @@ namespace Migrations.Services
                     and table_schema = :Schema
                     limit 1;", new
         {
-          Catalog = "searchle",
-          Schema = "account"
+          Catalog = _config.Metadata.Catalog,
+          Schema = _config.Metadata.Schema
         });
 
         if (ret == null)
         {
-          var script = await _scriptService.GetScriptAsync(ScriptKeys.CreateDatabase);
-          await cnn.ExecuteAsync(script);
-
-          script = await _scriptService.GetScriptAsync(ScriptKeys.SeedData);
-          await cnn.ExecuteAsync(script);
+          foreach (var scriptPath in _config.SetupScripts)
+          {
+            var script = await File.ReadAllTextAsync(scriptPath);
+            await cnn.ExecuteAsync(script);
+          }
         }
       }
     }

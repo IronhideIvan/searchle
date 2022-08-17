@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Migrations.Models;
+using Migrations.Core.Interfaces;
+using Migrations.Core.Models;
 using Npgsql;
 
-namespace Migrations.Services
+namespace Migrations.Core.Services
 {
   internal sealed class DataService : IDataService
   {

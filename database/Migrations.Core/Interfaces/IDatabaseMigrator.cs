@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Migrations.Services
+namespace Migrations.Core.Interfaces
 {
   public interface IDataaseMigrator
   {
