@@ -3,8 +3,8 @@ using Migrations.Models;
 
 namespace Migrations.Services
 {
-    public interface IScriptService
-    {
-        Task<string> GetScriptAsync(ScriptKeys key);
-    }
+  public interface IScriptService
+  {
+    Task<string> GetScriptAsync(ScriptKeys key);
+  }
 }
