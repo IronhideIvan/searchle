@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Searchle.GraphQl
+namespace Searchle.GraphQL
 {
   public class Program
   {

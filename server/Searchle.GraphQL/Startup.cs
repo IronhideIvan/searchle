@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Searchle.GraphQl.GraphQlTypes;
 using HotChocolate;
+using Searchle.GraphQL.QueryTypes;
 
-namespace Searchle.GraphQl
+namespace Searchle.GraphQL
 {
   public class Startup
   {
@@ -19,6 +19,7 @@ namespace Searchle.GraphQl
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddGraphQLServer()
+        .AddGlobalObjectIdentification()
         .AddQueryType<GraphQLQuery>();
     }
 
