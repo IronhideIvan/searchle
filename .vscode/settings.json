@@ -1,4 +1,16 @@
 {
     "editor.tabSize": 2,
-    "editor.detectIndentation": true
+    "editor.detectIndentation": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "localhost WordNet",
+            "database": "wordnet30",
+            "username": "wordnet30_admin",
+            "password": "password!1"
+        }
+    ]
 }
