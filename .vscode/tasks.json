@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/graphql/Searchle.GraphQl/Searchle.GraphQl.csproj",
+                "${workspaceFolder}/server/Searchle.GraphQL/Searchle.GraphQL.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

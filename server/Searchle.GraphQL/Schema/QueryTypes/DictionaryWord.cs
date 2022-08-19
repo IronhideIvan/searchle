@@ -1,4 +1,6 @@
-namespace Searchle.GraphQL.QueryTypes
+using Searchle.GraphQL.Schema.QueryTypes;
+
+namespace Searchle.GraphQL.Schema.QueryTypes
 {
   [Node]
   [GraphQLName("DictionaryWord")]

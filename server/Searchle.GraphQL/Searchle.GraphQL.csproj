@@ -9,6 +9,15 @@
   <ItemGroup>
     <PackageReference Include="HotChocolate" Version="12.12.1" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.12.1" />
+    <PackageReference Include="NetCore.AutoRegisterDi" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Searchle.Dictionary.Data\Searchle.Dictionary.Data.csproj" />
+    <ProjectReference Include="..\Wordnet.Data\Wordnet.Data.csproj" />
+    <ProjectReference Include="..\Searchle.DataAccess.Postgres\Searchle.DataAccess.Postgres.csproj" />
+    <ProjectReference Include="..\Searchle.Dictionary.Common\Searchle.Dictionary.Common.csproj" />
+    <ProjectReference Include="..\Searchle.DataAccess.Common\Searchle.DataAccess.Common.csproj" />
   </ItemGroup>
 
 </Project>

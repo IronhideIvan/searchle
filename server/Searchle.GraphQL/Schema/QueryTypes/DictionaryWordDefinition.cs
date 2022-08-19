@@ -1,4 +1,4 @@
-namespace Searchle.GraphQL.QueryTypes
+namespace Searchle.GraphQL.Schema.QueryTypes
 {
   [Node]
   [GraphQLName("DictionaryWordDefinition")]
@@ -13,7 +13,7 @@ namespace Searchle.GraphQL.QueryTypes
 
     public static DictionaryWordDefinition Get(int Id)
     {
-      return new DictionaryWordDefinition { Id = Id, Definition = "A test definition.s" };
+      return new DictionaryWordDefinition { Id = Id, Definition = "A test definition." };
     }
   }
 }
