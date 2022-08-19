@@ -34,9 +34,9 @@ namespace Searchle.DataAccess.Common.Sql
       return this;
     }
 
-    public QueryBuilder From(string schema, string table, string alias)
+    public QueryBuilder From(string table)
     {
-      _fromClause = $"{schema}.{table} {alias}";
+      _fromClause = table;
       return this;
     }
 

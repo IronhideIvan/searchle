@@ -29,7 +29,7 @@ namespace Searchle.GraphQL
       services.AddGraphQLServer()
         .AddGlobalObjectIdentification()
         .AddQueryType<GraphQLQuery>()
-        .AddTypeExtension<DictionaryWordResolver>();
+        .AddTypeExtension<DictionaryResolver>();
 
       var assembliesToScan = new[]{
         Assembly.GetExecutingAssembly(),
@@ -46,6 +46,7 @@ namespace Searchle.GraphQL
           // Services
           || c.Name.EndsWith("Service")
         )
+        .IgnoreThisInterface<DataAccess.Common.Interfaces.IQuery>()
         .AsPublicImplementedInterfaces();
 
       // Data providers

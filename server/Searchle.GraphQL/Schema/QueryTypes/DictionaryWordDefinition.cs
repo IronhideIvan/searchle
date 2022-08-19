@@ -1,3 +1,7 @@
+using Searchle.Common.Interfaces;
+using Searchle.Dictionary.Common.Models;
+using Searchle.Dictionary.Data.Services;
+
 namespace Searchle.GraphQL.Schema.QueryTypes
 {
   [Node]
@@ -8,12 +12,29 @@ namespace Searchle.GraphQL.Schema.QueryTypes
     [GraphQLName("id")]
     public int Id { get; set; }
 
+    [GraphQLName("dictionaryWordId")]
+    public int WordId { get; set; }
+
     [GraphQLName("definition")]
     public string? Definition { get; set; }
 
-    public static DictionaryWordDefinition Get(int Id)
+    [GraphQLName("pos")]
+    public string? PartOfSpeech { get; set; }
+
+    [GraphQLName("category")]
+    public string? Category { get; set; }
+
+    public static async Task<DictionaryWordDefinition?> GetAsync(int id,
+      [Service] ILexicalDefinitionService service,
+      [Service] IObjectMapper<LexicalDefinition, DictionaryWordDefinition> mapper
+      )
     {
-      return new DictionaryWordDefinition { Id = Id, Definition = "A test definition." };
+      var definition = await service.GetLexicalDefinition(id);
+      if (definition == null)
+      {
+        return null;
+      }
+      return mapper.Transform(definition);
     }
   }
 }

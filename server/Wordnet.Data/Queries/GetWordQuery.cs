@@ -24,7 +24,7 @@ namespace Wordnet.Data.Queries
       */
 
       var query = new QueryBuilder()
-          .From("public", "word", "w")
+          .From("public.word w")
           .AddSelect("w.wordid", nameof(LexicalWord.LexicalWordId))
           .AddSelectIfSelectorExists("w.lemma", nameof(LexicalWord.Lemma), this.Selectors)
           .AddWhere("w.wordid = :WordId")
