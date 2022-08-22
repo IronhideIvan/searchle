@@ -40,7 +40,7 @@ namespace Searchle.GraphQL
       services.RegisterAssemblyPublicNonGenericClasses(assembliesToScan)
         .Where(c =>
           // Object mappers
-          c.Name.EndsWith("Mapper")
+          c.Name.EndsWith("Transformer")
           // Data access objects
           || c.Name.EndsWith("Dao")
           // Services
@@ -74,8 +74,6 @@ namespace Searchle.GraphQL
               });
         endpoints.MapGraphQL();
       });
-
-
     }
   }
 }
