@@ -26,7 +26,7 @@ namespace Searchle.GraphQL.Schema.QueryTypes
 
     public static async Task<DictionaryWordDefinition?> GetAsync(int id,
       [Service] ILexicalDefinitionService service,
-      [Service] IObjectMapper<LexicalDefinition, DictionaryWordDefinition> mapper
+      [Service] IObjectTransformer<LexicalDefinition, DictionaryWordDefinition> mapper
       )
     {
       var definition = await service.GetLexicalDefinition(id);

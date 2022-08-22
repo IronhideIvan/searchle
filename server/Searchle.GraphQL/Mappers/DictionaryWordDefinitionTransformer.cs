@@ -5,9 +5,9 @@ using Searchle.GraphQL.Schema.QueryTypes;
 
 namespace Searchle.GraphQL.Mappers
 {
-  public class DictionaryWordDefinitionMapper
-    : IObjectMapper<LexicalDefinition, DictionaryWordDefinition>,
-      IObjectMapper<DictionaryWordDefinition, LexicalDefinition>
+  public class DictionaryWordDefinitionTransformer
+    : IObjectTransformer<LexicalDefinition, DictionaryWordDefinition>,
+      IObjectTransformer<DictionaryWordDefinition, LexicalDefinition>
   {
     public DictionaryWordDefinition Transform(LexicalDefinition obj)
     {

@@ -19,7 +19,7 @@ namespace Searchle.GraphQL.Schema.QueryTypes
     [GraphQLName("definitions")]
     public async Task<IEnumerable<DictionaryWordDefinition>>? GetDefinitions(
       [Service] ILexicalDefinitionService service,
-      [Service] IObjectMapper<LexicalDefinition, DictionaryWordDefinition> mapper
+      [Service] IObjectTransformer<LexicalDefinition, DictionaryWordDefinition> mapper
       )
     {
       var definitions = await service.GetLexicalDefinitionsByWord(this.Id);
@@ -29,7 +29,7 @@ namespace Searchle.GraphQL.Schema.QueryTypes
     public static async Task<DictionaryWord?> GetAsync(
       int id,
       [Service] ILexicalWordService service,
-      [Service] IObjectMapper<LexicalWord, DictionaryWord> mapper)
+      [Service] IObjectTransformer<LexicalWord, DictionaryWord> mapper)
     {
       var word = await service.GetWordAsync(id);
       if (word == null)

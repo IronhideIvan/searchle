@@ -14,7 +14,7 @@ namespace Searchle.GraphQL.Resolvers
     public async Task<DictionaryWord?> GetWord(
       [ID(nameof(DictionaryWord))] int id,
       [Service] ILexicalWordService service,
-      [Service] IObjectMapper<LexicalWord, DictionaryWord> mapper
+      [Service] IObjectTransformer<LexicalWord, DictionaryWord> mapper
     )
     {
       var word = await service.GetWordAsync(id);
@@ -30,7 +30,7 @@ namespace Searchle.GraphQL.Resolvers
     public async Task<DictionaryWordDefinition?> GetSingleDefinition(
       [ID(nameof(DictionaryWordDefinition))] int id,
       [Service] ILexicalDefinitionService service,
-      [Service] IObjectMapper<LexicalDefinition, DictionaryWordDefinition> mapper
+      [Service] IObjectTransformer<LexicalDefinition, DictionaryWordDefinition> mapper
       )
     {
       var definition = await service.GetLexicalDefinition(id);
@@ -45,7 +45,7 @@ namespace Searchle.GraphQL.Resolvers
     public async Task<IEnumerable<DictionaryWordDefinition>> GetDefinitionsByWord(
       [ID(nameof(DictionaryWord))] int wordId,
       [Service] ILexicalDefinitionService service,
-      [Service] IObjectMapper<LexicalDefinition, DictionaryWordDefinition> mapper
+      [Service] IObjectTransformer<LexicalDefinition, DictionaryWordDefinition> mapper
     )
     {
       var definitions = await service.GetLexicalDefinitionsByWord(wordId);

@@ -1,6 +1,6 @@
 namespace Searchle.Common.Interfaces
 {
-  public interface IObjectMapper<From, To>
+  public interface IObjectTransformer<From, To>
   {
     To Transform(From obj);
   }
