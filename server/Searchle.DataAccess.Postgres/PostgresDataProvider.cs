@@ -22,7 +22,7 @@ namespace Searchle.DataAccess.Postgres
       using (var cnn = new NpgsqlConnection(_config.ConnectionString))
       {
         cnn.Open();
-        var results = await cnn.QueryAsync<T>(sql, param: query);
+        var results = await cnn.QueryAsync<T>(sql, param: query.GetParameters());
         return results;
       }
     }

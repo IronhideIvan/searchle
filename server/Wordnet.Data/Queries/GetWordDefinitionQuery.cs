@@ -32,5 +32,10 @@ namespace Wordnet.Data.Queries
 
       return query;
     }
+
+    public object GetParameters()
+    {
+      return this;
+    }
   }
 }
