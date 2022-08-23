@@ -4,6 +4,7 @@ using Searchle.Dictionary.Common.Models;
 using Searchle.Dictionary.Data.Services;
 using Searchle.GraphQL.Schema;
 using Searchle.GraphQL.Schema.QueryTypes;
+using Searchle.GraphQL.Services;
 
 namespace Searchle.GraphQL.Resolvers
 {
@@ -50,6 +51,24 @@ namespace Searchle.GraphQL.Resolvers
     {
       var definitions = await service.GetLexicalDefinitionsByWord(wordId);
       return definitions.Select(d => mapper.Transform(d));
+    }
+
+    [GraphQLName("wordSearch")]
+    public async Task<IEnumerable<DictionaryWord>> GetWordSearch(
+      string queryString,
+      [Service] ILexicalSearchService searchService,
+      [Service] IObjectTransformer<LexicalWord, DictionaryWord> wordTransformer,
+      [Service] IQueryParserService queryParser
+      )
+    {
+      if (string.IsNullOrWhiteSpace(queryString))
+      {
+        return new DictionaryWord[] { };
+      }
+
+      var parsedQuery = queryParser.ParseQueryString(queryString);
+      var results = await searchService.SearchWordsAsync(parsedQuery);
+      return results.Select(r => wordTransformer.Transform(r));
     }
   }
 }

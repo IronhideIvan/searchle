@@ -39,6 +39,18 @@ namespace Searchle.GraphQL.Tests.Services
     }
 
     [Theory]
+    [InlineData("", 0)]
+    [InlineData(null, 0)]
+    [InlineData("r:3", 3)]
+    [InlineData("abc r:7 l:3 in:1 ::: df ex:ioen", 7)]
+    [InlineData("l:2 r:5 r:8", 8)]
+    public void QueryParserService_ParseQueryString_ResultLimitParses(string query, int expectedLength)
+    {
+      var ret = _service.ParseQueryString(query);
+      Assert.Equal(expectedLength, ret.ResultLimit);
+    }
+
+    [Theory]
     [InlineData("")]
     [InlineData(null)]
     [InlineData("l:3")]
@@ -67,6 +79,21 @@ namespace Searchle.GraphQL.Tests.Services
     }
 
     [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData("l:3")]
+    [InlineData("es:a", 'a')]
+    [InlineData("es:aBc", 'a', 'b', 'c')]
+    [InlineData("ex:ad :: es:2j7 l:4   4adf abc", '2', 'j', '7')]
+    [InlineData("ex:ad :: es:2j7 l:4   4adf es:POL abc", '2', 'j', '7', 'p', 'o', 'l')]
+    [InlineData("es:a_b_c", 'a', '_', 'b', '_', 'c')]
+    public void QueryParserService_ParseQueryString_ExactSearchParses(string query, params char[] expectedCharacters)
+    {
+      var ret = _service.ParseQueryString(query);
+      ValidateValuesInCollection(ret.ExactSearch, expectedCharacters);
+    }
+
+    [Theory]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("abc", "abc")]
@@ -82,15 +109,33 @@ namespace Searchle.GraphQL.Tests.Services
       ValidateValuesInCollection(ret.SearchTerms, expectedTerms);
     }
 
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData("abc", false)]
+    [InlineData("sp:false", false)]
+    [InlineData("sp:true", false)]
+    [InlineData("sp:y", true)]
+    [InlineData("sp:n sp:y", true)]
+    [InlineData("sp:y sp:n", false)]
+    public void QueryParserService_ParseQueryString_ExcludeSpecialCharactersParses(string query, bool expectedValue)
+    {
+      var ret = _service.ParseQueryString(query);
+      Assert.Equal(expectedValue, ret.ExcludeSpecialCharacters);
+    }
+
     [Fact]
     public void QueryParserService_ParseQueryString_FullQueryParses()
     {
-      string query = "dr l:5 in:abc ex:ef";
+      string query = "dr l:5 in:abc ex:ef sp:y es:d_i_e r:40";
       var ret = _service.ParseQueryString(query);
       ValidateValuesInCollection(ret.SearchTerms, new[] { "dr" });
       ValidateValuesInCollection(ret.MustInclude, new[] { 'a', 'b', 'c' });
       ValidateValuesInCollection(ret.MustExclude, new[] { 'e', 'f' });
+      ValidateValuesInCollection(ret.ExactSearch, new[] { 'd', '_', 'i', '_', 'e' });
       Assert.Equal(5, ret.LetterCount);
+      Assert.Equal(40, ret.ResultLimit);
+      Assert.True(ret.ExcludeSpecialCharacters);
     }
 
     private void ValidateValuesInCollection<T>(IEnumerable<T>? collection, T[] expectedValues)

@@ -23,12 +23,14 @@ namespace Searchle.GraphQL.Services
       var searchTerms = new List<string>();
       var mustInclude = new List<char>();
       var mustExclude = new List<char>();
+      var exactSearch = new List<char>();
 
       var searchObj = new LexicalSearch
       {
         SearchTerms = searchTerms,
         MustExclude = mustExclude,
-        MustInclude = mustInclude
+        MustInclude = mustInclude,
+        ExactSearch = exactSearch
       };
 
       if (searchQuery == null || searchQuery.Length == 0)
@@ -78,11 +80,29 @@ namespace Searchle.GraphQL.Services
             Int32.TryParse(segmentValue, out letterCount);
             searchObj.LetterCount = letterCount;
             break;
+          case "r":
+            int limit = 0;
+            Int32.TryParse(segmentValue, out limit);
+            searchObj.ResultLimit = limit;
+            break;
           case "in":
             mustInclude.AddRange(segmentValue.ToCharArray());
             break;
           case "ex":
             mustExclude.AddRange(segmentValue.ToCharArray());
+            break;
+          case "es":
+            exactSearch.AddRange(segmentValue.ToCharArray());
+            break;
+          case "sp":
+            if (segmentValue == "y")
+            {
+              searchObj.ExcludeSpecialCharacters = true;
+            }
+            else
+            {
+              searchObj.ExcludeSpecialCharacters = false;
+            }
             break;
           default:
             searchTerms.Add(seg);
