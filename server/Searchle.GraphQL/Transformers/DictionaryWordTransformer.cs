@@ -3,7 +3,7 @@ using Searchle.Common.Interfaces;
 using Searchle.Dictionary.Common.Models;
 using Searchle.GraphQL.Schema.QueryTypes;
 
-namespace Searchle.GraphQL.Mappers
+namespace Searchle.GraphQL.Transformers
 {
   public class DictionaryWordTransformer
     : IObjectTransformer<LexicalWord, DictionaryWord>,
