@@ -1,10 +1,11 @@
 using System;
 using System.Globalization;
+using Searchle.Common.Interfaces;
 using Searchle.Dictionary.Common.Models;
 
-namespace Searchle.GraphQL.Services
+namespace Searchle.GraphQL.Transformers
 {
-  public class QueryParserService : IQueryParserService
+  public class WordSearchTransformer : IObjectTransformer<string, LexicalSearch>
   {
     private const string QUERY_CLAUSE_SEPARATOR = ":";
 
@@ -18,7 +19,7 @@ namespace Searchle.GraphQL.Services
       in:abc = word must include the letters "a", "b" and "c".
       ex:ef = word must exclude the letters "e" and "f".
     */
-    public LexicalSearch ParseQueryString(string searchQuery)
+    public LexicalSearch Transform(string searchQuery)
     {
       var searchTerms = new List<string>();
       var mustInclude = new List<char>();

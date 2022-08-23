@@ -4,7 +4,6 @@ using Searchle.Dictionary.Common.Models;
 using Searchle.Dictionary.Data.Services;
 using Searchle.GraphQL.Schema;
 using Searchle.GraphQL.Schema.QueryTypes;
-using Searchle.GraphQL.Services;
 
 namespace Searchle.GraphQL.Resolvers
 {
@@ -58,7 +57,7 @@ namespace Searchle.GraphQL.Resolvers
       string queryString,
       [Service] ILexicalSearchService searchService,
       [Service] IObjectTransformer<LexicalWord, DictionaryWord> wordTransformer,
-      [Service] IQueryParserService queryParser
+      [Service] IObjectTransformer<string, LexicalSearch> queryTransformer
       )
     {
       if (string.IsNullOrWhiteSpace(queryString))
@@ -66,7 +65,7 @@ namespace Searchle.GraphQL.Resolvers
         return new DictionaryWord[] { };
       }
 
-      var parsedQuery = queryParser.ParseQueryString(queryString);
+      var parsedQuery = queryTransformer.Transform(queryString);
       var results = await searchService.SearchWordsAsync(parsedQuery);
       return results.Select(r => wordTransformer.Transform(r));
     }
