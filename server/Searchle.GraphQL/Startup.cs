@@ -1,5 +1,5 @@
 using Searchle.GraphQL.Schema;
-using Searchle.Dictionary.Data.Services;
+using Searchle.Dictionary.Business.Services;
 using Searchle.Dictionary.Common.Interfaces;
 using Wordnet.Data;
 using Wordnet.Data.Dao;

@@ -1,6 +1,6 @@
 using Searchle.Common.Interfaces;
 using Searchle.Dictionary.Common.Models;
-using Searchle.Dictionary.Data.Services;
+using Searchle.Dictionary.Business.Services;
 using Searchle.GraphQL.Schema.QueryTypes;
 
 namespace Searchle.GraphQL.Schema.QueryTypes

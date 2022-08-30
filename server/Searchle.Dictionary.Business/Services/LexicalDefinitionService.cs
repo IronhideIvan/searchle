@@ -3,7 +3,7 @@ using Searchle.DataAccess.Common;
 using Searchle.Dictionary.Common.Interfaces;
 using Searchle.Dictionary.Common.Models;
 
-namespace Searchle.Dictionary.Data.Services
+namespace Searchle.Dictionary.Business.Services
 {
   public class LexicalDefinitionService : ILexicalDefinitionService
   {
