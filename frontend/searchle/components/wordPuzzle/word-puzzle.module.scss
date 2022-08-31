@@ -1,0 +1,21 @@
+.puzzleWord {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 5px;
+  max-width: 23rem;
+}
+
+.puzzleLetter {
+  display: flex;
+  color: white;
+  font-size: 2rem;
+  cursor: inherit;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.puzzleLetterBox {
+  border: 3px solid rgb(222, 240, 255, .3);
+  cursor: pointer;
+  display: block;
+}
