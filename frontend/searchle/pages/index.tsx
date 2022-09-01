@@ -5,9 +5,11 @@ import styles from '../styles/Home.module.scss'
 import { Button } from '@nextui-org/react';
 import WordPuzzleGuessWord from '../components/wordPuzzle/wordPuzzleGuessWord';
 import { WordPuzzleLetterStatus } from '../interfaces/wordPuzzle/wordPuzzleLetter';
+import PuzzleKeyboard from '../components/keyboard/puzzleKeyboard';
 
 const Home: NextPage = () => {
   return (
+    <div>
       <WordPuzzleGuessWord letters={[
         {
           letter: "A",
@@ -35,6 +37,8 @@ const Home: NextPage = () => {
           position: 4
         }
       ]} />
+      <PuzzleKeyboard></PuzzleKeyboard>
+    </div>
   )
 }
 

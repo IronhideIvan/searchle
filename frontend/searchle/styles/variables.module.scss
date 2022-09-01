@@ -1,0 +1,7 @@
+$dark-puzzle-letter-color: white;
+$dark-puzzle-tile-border-color: rgb(222, 240, 255, .3);
+
+:export {
+  darkPuzzleLetterColor: $dark-puzzle-letter-color;
+  darkPuzzleTileBorderColor: $dark-puzzle-tile-border-color;
+}

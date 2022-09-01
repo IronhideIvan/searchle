@@ -11,7 +11,7 @@ const WordPuzzleGuessWord = (props: WordPuzzleGuessWordProps) => {
   return (
     <Container className={styles.puzzleWord}>
       {
-        props.letters.map((l) => <WordPuzzleGuessLetter {...l} />)
+        props.letters.map((l) => <WordPuzzleGuessLetter {...l} key={`${l.letter}|${l.position}`} />)
       }
     </Container>
   );

@@ -1,3 +1,5 @@
+@import "./../../styles/variables.module.scss";
+
 .puzzleWord {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -7,7 +9,7 @@
 
 .puzzleLetter {
   display: flex;
-  color: white;
+  color: $dark-puzzle-letter-color;
   font-size: 2rem;
   cursor: inherit;
   justify-content: center;
@@ -15,7 +17,7 @@
 }
 
 .puzzleLetterBox {
-  border: 3px solid rgb(222, 240, 255, .3);
+  border: 3px solid $dark-puzzle-tile-border-color;
   cursor: pointer;
   display: block;
 }
