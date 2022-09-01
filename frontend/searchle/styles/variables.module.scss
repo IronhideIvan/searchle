@@ -1,7 +1,35 @@
-$dark-puzzle-letter-color: white;
+// Puzzle
 $dark-puzzle-tile-border-color: rgb(222, 240, 255, .3);
 
+$dark-puzzle-tile-default-bg-color: none;
+$dark-puzzle-tile-correct-bg-color: green;
+$dark-puzzle-tile-close-bg-color: yellow;
+$dark-puzzle-tile-wrong-bg-color: red;
+
+$dark-puzzle-tile-default-text-color: white;
+$dark-puzzle-tile-correct-text-color: white;
+$dark-puzzle-tile-close-text-color: black;
+$dark-puzzle-tile-wrong-text-color: white;
+
+// Keyboard
+$dark-keyboard-background-color: darkblue;
+$dark-keyboard-key-background-color: goldenrod;
+$dark-keyboard-key-text-color: pink;
+
 :export {
-  darkPuzzleLetterColor: $dark-puzzle-letter-color;
+  // Puzzle tile text colors
+  darkPuzzleTileDefaultTextColor: $dark-puzzle-tile-default-text-color;
+  darkPuzzleTileCorrectTextColor: $dark-puzzle-tile-correct-text-color;
+  darkPuzzleTileCloseTextColor: $dark-puzzle-tile-close-text-color;
+  darkPuzzleTileWrongTextColor: $dark-puzzle-tile-wrong-text-color;
+
+  darkPuzzleTileDefaultBackgroundColor: $dark-puzzle-tile-default-bg-color;
+  darkPuzzleTileCorrectBackgroundColor: $dark-puzzle-tile-correct-bg-color;
+  darkPuzzleTileCloseBackgroundColor: $dark-puzzle-tile-close-bg-color;
+  darkPuzzleTileWrongBackgroundColor: $dark-puzzle-tile-wrong-bg-color;
+
   darkPuzzleTileBorderColor: $dark-puzzle-tile-border-color;
+  darkKeyboardBackgroundColor: $dark-keyboard-background-color;
+  darkKeyboardKeyBackgroundColor: $dark-keyboard-key-background-color;
+  darkKeyboardKeyTextColor: $dark-keyboard-key-text-color;
 }

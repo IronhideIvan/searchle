@@ -8,5 +8,5 @@ export enum WordPuzzleLetterStatus {
 export interface WordPuzzleLetter {
   letter: string;
   status: WordPuzzleLetterStatus;
-  position: Number;
+  index: number;
 }

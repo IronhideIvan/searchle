@@ -7,8 +7,20 @@ export const DarkTheme = createTheme({
   type: "dark",
   theme: {
     colors: {
-      puzzleLetter: variables.darkPuzzleLetterColor,
-      puzzleTileBorder: variables.darkPuzzleTileBorderColor
+      puzzleTileDefaultText: variables.darkPuzzleTileDefaultTextColor,
+      puzzleTileCorrectText: variables.darkPuzzleTileCorrectTextColor,
+      puzzleTileCloseText: variables.darkPuzzleTileCloseTextColor,
+      puzzleTileWrongText: variables.darkPuzzleTileWrongTextColor,
+
+      puzzleTileDefaultBackground: variables.darkPuzzleTileDefaultBackgroundColor,
+      puzzleTileCorrectBackground: variables.darkPuzzleTileCorrectBackgroundColor,
+      puzzleTileCloseBackground: variables.darkPuzzleTileCloseBackgroundColor,
+      puzzleTileWrongBackground: variables.darkPuzzleTileWrongBackgroundColor,
+
+      puzzleTileBorder: variables.darkPuzzleTileBorderColor,
+      keyboardBackground: variables.darkKeyboardBackgroundColor,
+      keyboardKeyBackground: variables.darkKeyboardKeyBackgroundColor,
+      keyboardKeyTextColor: variables.darkKeyboardKeyTextColor
     },
     space: {},
     fonts: {}

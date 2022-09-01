@@ -9,11 +9,13 @@
 
 .puzzleLetter {
   display: flex;
-  color: $dark-puzzle-letter-color;
   font-size: 2rem;
   cursor: inherit;
   justify-content: center;
   vertical-align: middle;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 .puzzleLetterBox {

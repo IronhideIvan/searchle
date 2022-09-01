@@ -1,0 +1,22 @@
+.puzzleKeyboardContainer {
+  padding: 3px;
+}
+
+.puzzleKeyboardRow {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.puzzleKey {
+  margin: 3px;
+  border: none;
+  min-height: 3rem;
+  min-width: 2rem;
+  border-radius: 5px;
+}
+
+.puzzleKeyLetter {
+  vertical-align: middle;
+  font-size: 1rem;
+}
