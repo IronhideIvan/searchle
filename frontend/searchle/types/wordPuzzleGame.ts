@@ -143,7 +143,17 @@ export class WordPuzzleGame {
     }
 
     if(letterIndex === 0){
-      return null;
+      // don't do anything if we are on the first word.
+      if(board.words.length === 1){
+        return null;
+      }
+
+      // if we don't have anything else then
+      // delete the latest word.
+      const boardCopy = deepCopy(board);
+      boardCopy.words.pop();
+      
+      return boardCopy;
     }
 
     if(letterIndex === -1){
@@ -151,7 +161,6 @@ export class WordPuzzleGame {
     }
 
     const boardCopy = deepCopy(board);
-
     const oldWord = boardCopy.words[word.index];
     const oldLetter = oldWord.letters[letterIndex - 1];
     oldWord.letters[letterIndex - 1] = {
