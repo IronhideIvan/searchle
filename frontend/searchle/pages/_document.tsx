@@ -1,6 +1,12 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
-import { CssBaseline } from '@nextui-org/react';
+import { CssBaseline, styled } from '@nextui-org/react';
+
+const MyBody = styled('body',
+  {
+    backgroundColor: "$background"
+  }
+);
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -15,10 +21,10 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>{CssBaseline.flush()}</Head>
-        <body>
+        <MyBody>
           <Main />
           <NextScript />
-        </body>
+        </MyBody>
       </Html>
     );
   }

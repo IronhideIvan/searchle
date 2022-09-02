@@ -1,14 +1,14 @@
 import styles from "./word-puzzle.module.scss"
-import { Container } from "@nextui-org/react";
-import { WordPuzzleLetter, WordPuzzleLetterStatus } from "../../interfaces/wordPuzzle/wordPuzzleLetter";
-import WordPuzzleGuessLetter from "./wordPuzzleGuessLetter";
-import { WordPuzzleWord } from "../../interfaces/wordPuzzle/wordPuzzleWord";
+import { WordPuzzleLetter } from "../../interfaces/wordPuzzle/wordPuzzleLetter";
 import PuzzleKeyboard from "../keyboard/puzzleKeyboard";
 import { KeyboardKeys } from "../../interfaces/keyboard/keyboardKeys";
 import { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
-import { wordPuzzleGame, WordPuzzleGame } from "../../types/wordPuzzleGame";
+import { wordPuzzleGame } from "../../types/wordPuzzleGame";
+import { styled } from "@nextui-org/react";
+
+const WordPuzzleGuessWordContainer = styled('div');
 
 const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
@@ -37,7 +37,7 @@ const WordPuzzleGuessBoard = () => {
 
   return (
     <div>
-      <div>
+      <WordPuzzleGuessWordContainer className={styles.wordPuzzleWordContainer}>
         {
           board.words.map((w) => (
             <WordPuzzleGuessWord
@@ -47,7 +47,7 @@ const WordPuzzleGuessBoard = () => {
             />
           ))
         }
-      </div>
+      </WordPuzzleGuessWordContainer>
 
       <PuzzleKeyboard onKeyPressed={keyboardKeyPressed} />
     </div>

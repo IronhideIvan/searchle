@@ -1,10 +1,14 @@
-@import "./../../styles/variables.module.scss";
+.wordPuzzleWordContainer {
+  min-height: 50vh;
+  padding: 10px;
+}
 
 .puzzleWord {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 5px;
   max-width: 23rem;
+  margin-bottom: 3px;
 }
 
 .puzzleLetter {
@@ -19,7 +23,8 @@
 }
 
 .puzzleLetterBox {
-  border: 3px solid $dark-puzzle-tile-border-color;
+  border-style: solid;
+  border-width: 3px;
   cursor: pointer;
   display: block;
 }

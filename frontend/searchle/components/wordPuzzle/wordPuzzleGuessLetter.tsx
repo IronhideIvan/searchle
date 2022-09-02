@@ -7,7 +7,11 @@ interface WordPuzzleGuessLetterProps extends WordPuzzleLetter {
   onClick?(puzzleLetter: WordPuzzleLetter): void;
 }
 
-const WordPuzzleGuessLetterTile = styled('div');
+const WordPuzzleGuessLetterTile = styled('div',
+  {
+    borderColor: "$puzzleTileBorder"
+  }
+);
 
 const WordPuzzleGuessLetter = (props: WordPuzzleGuessLetterProps) => {
 
@@ -32,7 +36,9 @@ const WordPuzzleGuessLetter = (props: WordPuzzleGuessLetterProps) => {
 
   return (
     <WordPuzzleGuessLetterTile
-      css={{ backgroundColor: tileBgColor }}
+      css={{
+        backgroundColor: tileBgColor
+      }}
       className={styles.puzzleLetterBox}
       onClick={onClicked}>
       <Text
