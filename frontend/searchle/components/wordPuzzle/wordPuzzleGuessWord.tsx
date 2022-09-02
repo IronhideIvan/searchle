@@ -5,46 +5,15 @@ import WordPuzzleGuessLetter from "./wordPuzzleGuessLetter";
 import { WordPuzzleWord } from "../../interfaces/wordPuzzle/wordPuzzleWord";
 
 interface WordPuzzleGuessWordProps extends WordPuzzleWord {
-  onWordChanged?(word: WordPuzzleWord): void;
+  onLetterClicked?(letter: WordPuzzleLetter): void;
 }
 
 const WordPuzzleGuessWord = (props: WordPuzzleGuessWordProps) => {
   const onLetterClicked = (letter: WordPuzzleLetter): void => {
-    if (!props.onWordChanged) {
-      return;
+    if (props.onLetterClicked) {
+      props.onLetterClicked(letter);
     }
 
-    const { status } = letter;
-    let newStatus = status;
-
-    if (status === WordPuzzleLetterStatus.Unresolved) {
-      newStatus = WordPuzzleLetterStatus.CorrectPosition;
-    }
-    else if (status === WordPuzzleLetterStatus.CorrectPosition) {
-      newStatus = WordPuzzleLetterStatus.IncorrectPosition;
-    }
-    else if (status === WordPuzzleLetterStatus.IncorrectPosition) {
-      newStatus = WordPuzzleLetterStatus.NotExists;
-    }
-    else if (status === WordPuzzleLetterStatus.NotExists) {
-      newStatus = WordPuzzleLetterStatus.Unresolved;
-    }
-
-    const newLetters: WordPuzzleLetter[] =
-      props.letters.slice(0, letter.index).concat(
-        [{
-          ...letter,
-          status: newStatus
-        }],
-        props.letters.slice(letter.index + 1)
-      );
-
-    const newWord: WordPuzzleWord = {
-      ...props,
-      letters: newLetters
-    }
-
-    props.onWordChanged(newWord);
   }
 
   return (

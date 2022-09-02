@@ -1,3 +1,5 @@
+import { WordPuzzleWord as WordPuzzleWord } from "./wordPuzzleWord";
+
 export enum WordPuzzleLetterStatus {
   Unresolved,
   CorrectPosition,
@@ -9,4 +11,5 @@ export interface WordPuzzleLetter {
   letter: string;
   status: WordPuzzleLetterStatus;
   index: number;
+  parent: WordPuzzleWord;
 }
