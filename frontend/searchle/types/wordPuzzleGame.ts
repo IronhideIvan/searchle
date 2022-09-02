@@ -142,13 +142,17 @@ export class WordPuzzleGame {
       }
     }
 
-    if(letterIndex <= 0){
+    if(letterIndex === 0){
       return null;
+    }
+
+    if(letterIndex === -1){
+      letterIndex = word.letters.length;
     }
 
     const boardCopy = deepCopy(board);
 
-    const oldWord = board.words[word.index];
+    const oldWord = boardCopy.words[word.index];
     const oldLetter = oldWord.letters[letterIndex - 1];
     oldWord.letters[letterIndex - 1] = {
       ...oldLetter,

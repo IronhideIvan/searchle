@@ -19,7 +19,20 @@ const WordPuzzleGuessBoard = () => {
   }
 
   const keyboardKeyPressed = (keyboardKey: KeyboardKeys): void => {
+    let newBoard: WordPuzzleBoard | null = null;
+    if (keyboardKey === KeyboardKeys.Delete) {
+      newBoard = wordPuzzleGame.backspace(board);
+    }
+    else if (keyboardKey === KeyboardKeys.Enter) {
+      newBoard = wordPuzzleGame.addNewWord(board);
+    }
+    else {
+      newBoard = wordPuzzleGame.addLetter(keyboardKey, board);
+    }
 
+    if (newBoard !== null) {
+      setBoard(newBoard);
+    }
   }
 
   return (
@@ -36,7 +49,7 @@ const WordPuzzleGuessBoard = () => {
         }
       </div>
 
-      <PuzzleKeyboard></PuzzleKeyboard>
+      <PuzzleKeyboard onKeyPressed={keyboardKeyPressed} />
     </div>
   )
 }

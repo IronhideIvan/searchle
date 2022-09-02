@@ -48,7 +48,7 @@ const KeyboardElement = styled('div', {
 
 const PuzzleKeyboard = (props: PuzzleKeyboardProps) => {
   const onKeyPressed = (keyboardKey: KeyboardKeys): void => {
-    if(props.onKeyPressed){
+    if (props.onKeyPressed) {
       props.onKeyPressed(keyboardKey);
     }
   }
@@ -68,7 +68,9 @@ const PuzzleKeyboard = (props: PuzzleKeyboardProps) => {
         {buildKeyboardKeys(keyListRow2)}
       </div>
       <div className={styles.puzzleKeyboardRow}>
+        <PuzzleKeyboardKey key={KeyboardKeys.Enter} keyboardKey={KeyboardKeys.Enter} onPress={onKeyPressed} />
         {buildKeyboardKeys(keyListRow3)}
+        <PuzzleKeyboardKey key={KeyboardKeys.Delete} keyboardKey={KeyboardKeys.Delete} onPress={onKeyPressed} />
       </div>
     </KeyboardElement>
   );
