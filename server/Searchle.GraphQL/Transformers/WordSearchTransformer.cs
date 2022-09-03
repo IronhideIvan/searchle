@@ -12,11 +12,16 @@ namespace Searchle.GraphQL.Transformers
     /*
       example query with explanations:
 
-      "di l:5 in:abc ex:ef"
+      "di l:5 in:abc pos:a|2,b|3,c|1 dif:d|2,e|3 ex:ef"
 
-      dr = word contains a segment with "di".
+      di = word contains a segment with "di".
       l:5 = word has a length of 5 letters.
-      in:abc = word must include the letters "a", "b" and "c".
+      in:abc = word must include the letters "a", "b", and "c", 
+            regardless of position.
+      pos:a|2,b|3,c|1 = word must include the letters "a", "b" and "c".
+            However, the "a" is in the 2nd position, the "b" in 3rs, etc.
+      dif:d|2,e|3 = word includes the letters "d" and "e". However, "d"
+            is not in 2nd position and "e" is not in 3rd.
       ex:ef = word must exclude the letters "e" and "f".
     */
     public LexicalSearch Transform(string searchQuery)
@@ -25,13 +30,17 @@ namespace Searchle.GraphQL.Transformers
       var mustInclude = new List<char>();
       var mustExclude = new List<char>();
       var exactSearch = new List<char>();
+      var mustIncludeAtPosition = new List<LexicalSearchSpecificPosition>();
+      var mustExcludeAtPosition = new List<LexicalSearchSpecificPosition>();
 
       var searchObj = new LexicalSearch
       {
         SearchTerms = searchTerms,
         MustExclude = mustExclude,
         MustInclude = mustInclude,
-        ExactSearch = exactSearch
+        ExactSearch = exactSearch,
+        MustIncludeAtPosition = mustIncludeAtPosition,
+        MustExcludeAtPosition = mustExcludeAtPosition
       };
 
       if (searchQuery == null || searchQuery.Length == 0)
@@ -95,6 +104,12 @@ namespace Searchle.GraphQL.Transformers
           case "es":
             exactSearch.AddRange(segmentValue.ToCharArray());
             break;
+          case "pos":
+            AddToPositionList(segmentValue, mustIncludeAtPosition);
+            break;
+          case "dif":
+            AddToPositionList(segmentValue, mustExcludeAtPosition);
+            break;
           case "sp":
             if (segmentValue == "y")
             {
@@ -112,6 +127,56 @@ namespace Searchle.GraphQL.Transformers
       }
 
       return searchObj;
+    }
+
+    private void AddToPositionList(string searchClause, List<LexicalSearchSpecificPosition> list)
+    {
+      var segments = searchClause?.Split(",");
+
+      if (segments == null || segments.Length == 0)
+      {
+        return;
+      }
+
+      foreach (var segment in segments)
+      {
+        // Arbitrary sanity check so that we don't filter too many things in one
+        // word and possibly break the query.
+        if (list.Count > 20)
+        {
+          break;
+        }
+
+        // [0] = character
+        // [1] = position
+        var posClause = segment.Split("|");
+        if (posClause.Length < 2)
+        {
+          continue;
+        }
+
+        if (!char.TryParse(posClause[0].Trim(), out char c))
+        {
+          continue;
+        }
+
+        if (!Int32.TryParse(posClause[1].Trim(), out int pos))
+        {
+          continue;
+        }
+
+        // Arbitrary sanity so that we don't try to break the underlying query with words too long
+        if (pos < 0 || pos > 50)
+        {
+          continue;
+        }
+
+        list.Add(new LexicalSearchSpecificPosition
+        {
+          Letter = c,
+          Position = pos
+        });
+      }
     }
   }
 }

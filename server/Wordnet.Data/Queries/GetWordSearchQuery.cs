@@ -60,6 +60,26 @@ namespace Wordnet.Data.Queries
         query.AddWhere("w.lemma like :ExactSearch");
       }
 
+      if (SearchQuery.MustIncludeAtPosition?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var term in SearchQuery.MustIncludeAtPosition)
+        {
+          query.AddWhere($"w.lemma like :MustIncludeAtPosition{index}");
+          ++index;
+        }
+      }
+
+      if (SearchQuery.MustExcludeAtPosition?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var term in SearchQuery.MustExcludeAtPosition)
+        {
+          query.AddWhere($"w.lemma not like :MustExcludeAtPosition{index}");
+          ++index;
+        }
+      }
+
       int limit = SearchQuery.ResultLimit;
       if (SearchQuery.ResultLimit == default(int))
       {
@@ -135,7 +155,41 @@ namespace Wordnet.Data.Queries
         parameters.Add($"ExactSearch", sb.ToString());
       }
 
+      if (SearchQuery.MustIncludeAtPosition?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var term in SearchQuery.MustIncludeAtPosition)
+        {
+          var clause = GetPositionalSearchTerm(term);
+          parameters.Add($"MustIncludeAtPosition{index}", clause);
+          ++index;
+        }
+      }
+
+      if (SearchQuery.MustExcludeAtPosition?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var term in SearchQuery.MustExcludeAtPosition)
+        {
+          var clause = GetPositionalSearchTerm(term);
+          parameters.Add($"MustExcludeAtPosition{index}", clause);
+          ++index;
+        }
+      }
+
       return parameters;
+    }
+
+    private string GetPositionalSearchTerm(LexicalSearchSpecificPosition term)
+    {
+      var sb = new StringBuilder();
+      for (int i = 0; i < term.Position; ++i)
+      {
+        sb.Append("_");
+      }
+
+      sb.Append(term.Letter + "%");
+      return sb.ToString();
     }
 
     private string GetRegexSanitizedChar(char input)
