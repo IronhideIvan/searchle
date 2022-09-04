@@ -101,7 +101,7 @@ namespace Searchle.GraphQL.Tests.Services
     [InlineData("es:a")]
     [InlineData("pos:a|2", "a|2")]
     [InlineData("pos:a|2 pos:b|42", "a|2", "b|42")]
-    [InlineData("l:3 pos:a|2,b|42,x|80 es:a", "a|2", "b|42")]
+    [InlineData("l:3 pos:,a|2,b|42,x|80 es:a", "a|2", "b|42")]
     public void WordSearchTransformer_ParseQueryString_IncludesSpecificPositionParses(string query, params string[] expectedCharacters)
     {
       var ret = _service.Transform(query);
@@ -115,7 +115,7 @@ namespace Searchle.GraphQL.Tests.Services
     [InlineData("es:a")]
     [InlineData("dif:a|2", "a|2")]
     [InlineData("dif:a|2 dif:b|42", "a|2", "b|42")]
-    [InlineData("l:3 dif:a|2,b|42,x|80 es:a", "a|2", "b|42")]
+    [InlineData("l:3 dif:,a|2,b|42,x|80 es:a", "a|2", "b|42")]
     public void WordSearchTransformer_ParseQueryString_ExcludesSpecificPositionParses(string query, params string[] expectedCharacters)
     {
       var ret = _service.Transform(query);
