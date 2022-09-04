@@ -29,7 +29,7 @@ const deepCopy = (board: WordPuzzleBoard): WordPuzzleBoard => {
   return newBoard;
 }
 
-export class WordPuzzleGame {
+class WordPuzzleGame {
   readonly defaultLetter: string = "_";
 
   createBoard(wordLength: number): WordPuzzleBoard {

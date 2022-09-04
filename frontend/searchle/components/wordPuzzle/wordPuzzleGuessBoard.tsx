@@ -5,8 +5,9 @@ import { KeyboardKeys } from "../../interfaces/keyboard/keyboardKeys";
 import { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
-import { wordPuzzleGame } from "../../types/wordPuzzleGame";
-import { styled } from "@nextui-org/react";
+import { wordPuzzleGame } from "../../business/wordPuzzleGame";
+import { Button, styled } from "@nextui-org/react";
+import { doWordSearch } from "../../business/wordPuzzleSearch";
 
 const WordPuzzleGuessWordContainer = styled('div');
 
@@ -35,6 +36,10 @@ const WordPuzzleGuessBoard = () => {
     }
   }
 
+  const searchClicked = async (): Promise<void> => {
+    await doWordSearch(board);
+  }
+
   return (
     <div>
       <WordPuzzleGuessWordContainer className={styles.wordPuzzleWordContainer}>
@@ -48,6 +53,8 @@ const WordPuzzleGuessBoard = () => {
           ))
         }
       </WordPuzzleGuessWordContainer>
+
+      <Button color={"primary"} auto ghost={true} onPress={searchClicked}>Search</Button>
 
       <PuzzleKeyboard onKeyPressed={keyboardKeyPressed} />
     </div>
