@@ -1,9 +1,9 @@
 import { searchWords } from "../apis/dictionaryApi";
-import { WordSearchWord } from "../interfaces/api/wordSearchResult";
+import { WordSearchResult, WordSearchWord } from "../interfaces/api/wordSearchResult";
 import { WordPuzzleBoard } from "../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "./wordPuzzleGame";
 
-export async function doWordSearch(board: WordPuzzleBoard): Promise<WordSearchWord[]> {
+export async function doWordSearch(board: WordPuzzleBoard): Promise<WordSearchResult> {
   const puzzleBreakdown = wordPuzzleGame.getPuzzleBreakdown(board);
   let searchQuery = `l:${puzzleBreakdown.wordLength} r:50 sp:y`;
 
@@ -31,7 +31,5 @@ export async function doWordSearch(board: WordPuzzleBoard): Promise<WordSearchWo
         ...puzzleBreakdown.includesLetters);
   }
 
-  console.log("searchQuery: " + searchQuery);
-
-  return await (await searchWords(searchQuery)).wordSearch;
+  return await searchWords(searchQuery);
 }

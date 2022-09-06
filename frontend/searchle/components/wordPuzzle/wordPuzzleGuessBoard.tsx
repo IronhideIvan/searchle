@@ -6,13 +6,17 @@ import { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "../../business/wordPuzzleGame";
-import { Button, styled } from "@nextui-org/react";
+import { Button, Modal, styled } from "@nextui-org/react";
 import { doWordSearch } from "../../business/wordPuzzleSearch";
+import WordPuzzleSearchResults from "./wordPuzzleResults";
+import { WordSearchResult } from "../../interfaces/api/wordSearchResult";
 
 const WordPuzzleGuessWordContainer = styled('div');
 
 const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
+  const [resultsVisible, setResultsVisible] = useState<boolean>(false);
+  const [searchResults, setSearchResults] = useState<WordSearchResult>({ wordSearch: [] });
 
   const puzzleLetterTryChangeStatus = (letter: WordPuzzleLetter): void => {
     const newBoard = wordPuzzleGame.cycleLetterStatus(letter);
@@ -37,7 +41,13 @@ const WordPuzzleGuessBoard = () => {
   }
 
   const searchClicked = async (): Promise<void> => {
-    await doWordSearch(board);
+    const results = await doWordSearch(board);
+    setSearchResults(results);
+    setResultsVisible(true);
+  }
+
+  const closeModal = (): void => {
+    setResultsVisible(false);
   }
 
   return (
@@ -57,6 +67,16 @@ const WordPuzzleGuessBoard = () => {
       <Button color={"primary"} auto ghost={true} onPress={searchClicked}>Search</Button>
 
       <PuzzleKeyboard onKeyPressed={keyboardKeyPressed} />
+
+      <Modal
+        closeButton
+        fullScreen
+        aria-label="Popup with search results"
+        open={resultsVisible}
+        onClose={closeModal}
+      >
+        <WordPuzzleSearchResults words={searchResults.wordSearch} />
+      </Modal>
     </div>
   )
 }
