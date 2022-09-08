@@ -6,10 +6,11 @@ import { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "../../business/wordPuzzleGame";
-import { Button, Modal, styled } from "@nextui-org/react";
+import { Modal, styled } from "@nextui-org/react";
 import { doWordSearch } from "../../business/wordPuzzleSearch";
-import WordPuzzleSearchResults from "./wordPuzzleResults";
 import { WordSearchResult } from "../../interfaces/api/wordSearchResult";
+import WordSearchResults from "../dictionary/WordSearchResults";
+import LoaderButton from "../common/LoaderButton";
 
 const WordPuzzleGuessWordContainer = styled('div');
 
@@ -17,6 +18,7 @@ const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
   const [resultsVisible, setResultsVisible] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<WordSearchResult>({ wordSearch: [] });
+  const [searchInProgress, setSearchInProgress] = useState<boolean>(false);
 
   const puzzleLetterTryChangeStatus = (letter: WordPuzzleLetter): void => {
     const newBoard = wordPuzzleGame.cycleLetterStatus(letter);
@@ -41,9 +43,16 @@ const WordPuzzleGuessBoard = () => {
   }
 
   const searchClicked = async (): Promise<void> => {
-    const results = await doWordSearch(board);
-    setSearchResults(results);
-    setResultsVisible(true);
+
+    try {
+      setSearchInProgress(true);
+      const results = await doWordSearch(board);
+      setSearchResults(results);
+      setResultsVisible(true);
+    }
+    finally {
+      setSearchInProgress(false);
+    }
   }
 
   const closeModal = (): void => {
@@ -51,7 +60,7 @@ const WordPuzzleGuessBoard = () => {
   }
 
   return (
-    <div>
+    <div className={styles.wordPuzzleBoardContainer}>
       <WordPuzzleGuessWordContainer className={styles.wordPuzzleWordContainer}>
         {
           board.words.map((w) => (
@@ -64,7 +73,17 @@ const WordPuzzleGuessBoard = () => {
         }
       </WordPuzzleGuessWordContainer>
 
-      <Button color={"primary"} auto ghost={true} onPress={searchClicked}>Search</Button>
+      <div className={styles.wordPuzzleBtnContainer}>
+        <LoaderButton
+          color={"primary"}
+          ghost={true}
+          onPress={searchClicked}
+          className={styles.wordPuzzleSearchBtn}
+          isLoading={searchInProgress}
+        >
+          Search
+        </LoaderButton>
+      </div>
 
       <PuzzleKeyboard onKeyPressed={keyboardKeyPressed} />
 
@@ -75,7 +94,7 @@ const WordPuzzleGuessBoard = () => {
         open={resultsVisible}
         onClose={closeModal}
       >
-        <WordPuzzleSearchResults words={searchResults.wordSearch} />
+        <WordSearchResults words={searchResults.wordSearch} />
       </Modal>
     </div>
   )

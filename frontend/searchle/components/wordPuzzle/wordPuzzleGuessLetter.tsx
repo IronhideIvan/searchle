@@ -16,7 +16,6 @@ const WordPuzzleGuessLetterTile = styled('div',
 const WordPuzzleGuessLetter = (props: WordPuzzleGuessLetterProps) => {
 
   const onClicked = () => {
-    // console.log("puzzle letter clicked: " + props.letter);
     if (props.onClick) {
       props.onClick(props);
     }

@@ -192,7 +192,7 @@ class WordPuzzleGame {
 
       w.letters.forEach((l) => {
         // If letter is empty space or in an unresolved state, then just ignore it.
-        if (l.letter === "_" || l.status === WordPuzzleLetterStatus.Unresolved) {
+        if (l.letter === this.defaultLetter || l.status === WordPuzzleLetterStatus.Unresolved) {
           return;
         }
         // If the letter doesn't exist in the word, then add it to the

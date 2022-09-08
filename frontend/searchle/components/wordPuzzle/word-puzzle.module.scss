@@ -1,6 +1,19 @@
+.wordPuzzleBoardContainer {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .wordPuzzleWordContainer {
-  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
   padding: 10px;
+  width: 100%;
 }
 
 .puzzleWord {
@@ -27,4 +40,13 @@
   border-width: 3px;
   cursor: pointer;
   display: block;
+}
+
+.wordPuzzleBtnContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.wordPuzzleSearchBtn {
+  width: 23rem;
 }
