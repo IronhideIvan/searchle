@@ -15,7 +15,8 @@ const WordSearchResults = (props: WordSearchResultsProps) => {
       headerLined
       aria-label="Table of search results"
       bordered
-      shadow={false}>
+      shadow={false}
+    >
       <Table.Header columns={columns}>
         {(c) => (
           <Table.Column

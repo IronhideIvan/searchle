@@ -94,7 +94,9 @@ const WordPuzzleGuessBoard = () => {
         open={resultsVisible}
         onClose={closeModal}
       >
-        <WordSearchResults words={searchResults.wordSearch} />
+        <div className={styles.searchResultsContainer}>
+          <WordSearchResults words={searchResults.wordSearch} />
+        </div>
       </Modal>
     </div>
   )
