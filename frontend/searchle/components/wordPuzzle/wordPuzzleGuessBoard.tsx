@@ -43,7 +43,6 @@ const WordPuzzleGuessBoard = () => {
 
   const physicalKeyboardKeyPressed = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     const virtualKey = convertToKeyboardKey(event.code);
-    console.log("raw: " + event.code + " converted: " + virtualKey);
     if (virtualKey !== null) {
       virtualKeyboardKeyPressed(virtualKey);
     }
