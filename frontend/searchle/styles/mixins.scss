@@ -1,0 +1,14 @@
+// 320px, 576px, 768px, 992px, 1200px, 1440px
+
+$screen-xxs: 320px;
+$screen-xs: 576px;
+$screen-s: 768px;
+$screen-m: 992px;
+$screen-l: 1200px;
+$screen-xl: 1440px;
+
+@mixin screen-min-width($min) { 
+  @media (min-width: $min) { 
+    @content 
+  } 
+};

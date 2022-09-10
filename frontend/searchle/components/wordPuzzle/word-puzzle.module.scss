@@ -1,3 +1,5 @@
+@import "./../../styles/mixins";
+
 .wordPuzzleBoardContainer {
   display: flex;
   height: 100%;
@@ -48,7 +50,13 @@
 }
 
 .wordPuzzleSearchBtn {
-  width: 23rem;
+  width: 20rem;
+
+  @include screen-min-width(760px) {
+    margin-bottom: 10px;
+    height: 3rem;
+    font-size: 1.2rem;
+  }
 }
 
 .searchResultsContainer {

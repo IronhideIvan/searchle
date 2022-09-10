@@ -1,3 +1,5 @@
+@import "./../../styles/mixins";
+
 .puzzleKeyboardContainer {
   padding: 3px;
 }
@@ -12,11 +14,32 @@
   margin: 3px;
   border: none;
   min-height: 3rem;
-  min-width: 2rem;
+  min-width: 1.4rem;
   border-radius: 5px;
+
+  @include screen-min-width(340px) {
+    min-width: 1.6rem;
+  }
+
+  @include screen-min-width(375px) {
+    min-width: 1.8rem;
+  }
+
+  @include screen-min-width(414px) {
+    min-width: 2rem;
+  }
+
+  @include screen-min-width($screen-s) {
+    min-width: 4rem;
+    margin: 4px;
+  }
 }
 
 .puzzleKeyLetter {
   vertical-align: middle;
   font-size: 1rem;
+
+  @include screen-min-width(760px) {
+    font-size: 1.3rem;
+  }
 }
