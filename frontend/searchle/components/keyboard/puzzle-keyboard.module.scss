@@ -39,7 +39,7 @@
   vertical-align: middle;
   font-size: 1rem;
 
-  @include screen-min-width(760px) {
+  @include screen-min-width($screen-s) {
     font-size: 1.3rem;
   }
 }
