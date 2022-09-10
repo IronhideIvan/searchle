@@ -17,6 +17,17 @@
   min-height: 3rem;
   min-width: 1.4rem;
   border-radius: 5px;
+  padding: 0;
+
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+
+  &:active {
+    background-color: $keyboard-btn-active;
+
+    -webkit-transition-duration: 0s;
+    transition-duration: 0s;
+  }
 
   @include screen-min-width(340px) {
     min-width: 1.6rem;
