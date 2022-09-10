@@ -12,8 +12,6 @@ import { WordSearchResult } from "../../interfaces/api/wordSearchResult";
 import WordSearchResults from "../dictionary/WordSearchResults";
 import LoaderButton from "../common/LoaderButton";
 
-const WordPuzzleGuessWordContainer = styled('div');
-
 const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
   const [resultsVisible, setResultsVisible] = useState<boolean>(false);
@@ -61,7 +59,7 @@ const WordPuzzleGuessBoard = () => {
 
   return (
     <div className={styles.wordPuzzleBoardContainer}>
-      <WordPuzzleGuessWordContainer className={styles.wordPuzzleWordContainer}>
+      <div className={styles.wordPuzzleWordContainer}>
         {
           board.words.map((w) => (
             <WordPuzzleGuessWord
@@ -71,7 +69,7 @@ const WordPuzzleGuessBoard = () => {
             />
           ))
         }
-      </WordPuzzleGuessWordContainer>
+      </div>
 
       <div className={styles.wordPuzzleBtnContainer}>
         <LoaderButton
