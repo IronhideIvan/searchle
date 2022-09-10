@@ -1,4 +1,5 @@
 @import "./../../styles/mixins";
+@import "./../../styles/variables.module";
 
 .puzzleKeyboardContainer {
   padding: 3px;
@@ -37,7 +38,13 @@
 
 .puzzleKeyLetter {
   vertical-align: middle;
-  font-size: 1rem;
+  margin: 0;
+  font-size: 0.9rem;
+
+  @include screen-min-width(375px) {
+    margin: 1px;
+    font-size: 1rem;
+  }
 
   @include screen-min-width($screen-s) {
     font-size: 1.3rem;
