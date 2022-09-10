@@ -4,13 +4,13 @@ interface LoaderButtonProps extends ButtonProps {
   isLoading: boolean;
 }
 
-const LoaderButton = (props: LoaderButtonProps) => {
+const LoaderButton = ({ isLoading, ...props }: LoaderButtonProps) => {
   return (
     <Button
       {...props}
-      disabled={props.isLoading}
+      disabled={isLoading}
     >
-      {props.isLoading
+      {isLoading
         ? <Loading color="currentColor" size="sm" />
         : props.children}
     </Button>
