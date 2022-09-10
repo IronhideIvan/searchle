@@ -2,15 +2,16 @@ import styles from "./word-puzzle.module.scss"
 import { WordPuzzleLetter } from "../../interfaces/wordPuzzle/wordPuzzleLetter";
 import PuzzleKeyboard from "../keyboard/puzzleKeyboard";
 import { KeyboardKeys } from "../../interfaces/keyboard/keyboardKeys";
-import { useState } from "react";
+import React, { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "../../business/wordPuzzleGame";
-import { Modal, styled } from "@nextui-org/react";
+import { Modal } from "@nextui-org/react";
 import { doWordSearch } from "../../business/wordPuzzleSearch";
 import { WordSearchResult } from "../../interfaces/api/wordSearchResult";
 import WordSearchResults from "../dictionary/WordSearchResults";
 import LoaderButton from "../common/LoaderButton";
+import { convertToKeyboardKey } from "../../interfaces/keyboard/keyboardKeysConverter";
 
 const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
@@ -23,7 +24,7 @@ const WordPuzzleGuessBoard = () => {
     setBoard(newBoard);
   }
 
-  const keyboardKeyPressed = (keyboardKey: KeyboardKeys): void => {
+  const virtualKeyboardKeyPressed = (keyboardKey: KeyboardKeys): void => {
     let newBoard: WordPuzzleBoard | null = null;
     if (keyboardKey === KeyboardKeys.Delete) {
       newBoard = wordPuzzleGame.backspace(board);
@@ -37,6 +38,14 @@ const WordPuzzleGuessBoard = () => {
 
     if (newBoard !== null) {
       setBoard(newBoard);
+    }
+  }
+
+  const physicalKeyboardKeyPressed = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    const virtualKey = convertToKeyboardKey(event.code);
+    console.log("raw: " + event.code + " converted: " + virtualKey);
+    if (virtualKey !== null) {
+      virtualKeyboardKeyPressed(virtualKey);
     }
   }
 
@@ -58,7 +67,10 @@ const WordPuzzleGuessBoard = () => {
   }
 
   return (
-    <div className={styles.wordPuzzleBoardContainer}>
+    <div className={styles.wordPuzzleBoardContainer}
+      onKeyUp={physicalKeyboardKeyPressed}
+      tabIndex={-1}
+    >
       <div className={styles.wordPuzzleWordContainer}>
         {
           board.words.map((w) => (
@@ -83,7 +95,7 @@ const WordPuzzleGuessBoard = () => {
         </LoaderButton>
       </div>
 
-      <PuzzleKeyboard onKeyPressed={keyboardKeyPressed} />
+      <PuzzleKeyboard onKeyPressed={virtualKeyboardKeyPressed} />
 
       <Modal
         closeButton
