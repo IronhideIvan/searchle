@@ -7,8 +7,14 @@ $screen-m: 992px;
 $screen-l: 1200px;
 $screen-xl: 1440px;
 
-@mixin screen-min-width($min) { 
-  @media (min-width: $min) { 
-    @content 
-  } 
-};
+@mixin screen-min-width($min) {
+  @media (min-width: $min) {
+    @content
+  }
+}
+
+@mixin screen-min-height($min) {
+  @media (min-height: $min) {
+    @content
+  }
+}

@@ -14,7 +14,7 @@
 .puzzleKey {
   margin: 3px;
   border: none;
-  min-height: 3rem;
+  min-height: 2rem;
   min-width: 1.4rem;
   border-radius: 5px;
   padding: 0;
@@ -41,9 +41,17 @@
     min-width: 2rem;
   }
 
+  @include screen-min-width($screen-xs) {
+    min-width: 3rem;
+  }
+
   @include screen-min-width($screen-s) {
     min-width: 4rem;
     margin: 4px;
+  }
+
+  @include screen-min-height($screen-xs) {
+    min-height: 3rem;
   }
 }
 
