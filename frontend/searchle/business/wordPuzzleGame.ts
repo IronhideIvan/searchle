@@ -33,6 +33,10 @@ const deepCopy = (board: WordPuzzleBoard): WordPuzzleBoard => {
 class WordPuzzleGame {
   readonly defaultLetter: string = "_";
 
+  getDefaultLetter(): string {
+    return this.defaultLetter;
+  }
+
   createBoard(wordLength: number): WordPuzzleBoard {
     const board = {
       words: [],
@@ -236,6 +240,10 @@ class WordPuzzleGame {
     });
 
     return puzzleBreakdown;
+  }
+
+  getWordAsString(word: WordPuzzleWord): string {
+    return "".concat(...word.letters.map(l => l.letter));
   }
 }
 

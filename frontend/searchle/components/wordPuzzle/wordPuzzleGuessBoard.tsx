@@ -6,18 +6,20 @@ import React, { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "../../business/wordPuzzleGame";
-import { Modal } from "@nextui-org/react";
+import { Modal, Text } from "@nextui-org/react";
 import { doWordSearch } from "../../business/wordPuzzleSearch";
 import { WordSearchResult } from "../../interfaces/api/wordSearchResult";
 import WordSearchResults from "../dictionary/WordSearchResults";
 import LoaderButton from "../common/LoaderButton";
 import { convertToKeyboardKey } from "../../interfaces/keyboard/keyboardKeysConverter";
+import { wordPuzzleValidator } from "../../business/WordPuzzleValidator";
 
 const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
   const [resultsVisible, setResultsVisible] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<WordSearchResult>({ wordSearch: [] });
   const [searchInProgress, setSearchInProgress] = useState<boolean>(false);
+  const [validationMessages, setValidationMessages] = useState<string[]>([]);
 
   const puzzleLetterTryChangeStatus = (letter: WordPuzzleLetter): void => {
     const newBoard = wordPuzzleGame.cycleLetterStatus(letter);
@@ -30,13 +32,26 @@ const WordPuzzleGuessBoard = () => {
       newBoard = wordPuzzleGame.backspace(board);
     }
     else if (keyboardKey === KeyboardKeys.Enter) {
-      newBoard = wordPuzzleGame.addNewWord(board);
+      const latestWord = board.words[board.words.length - 1];
+      const validations = wordPuzzleValidator.validateWord(latestWord, true);
+      setValidationMessages(validations);
+      if (validations.length > 0) {
+        return;
+      }
+      else {
+        newBoard = wordPuzzleGame.addNewWord(board);
+      }
     }
     else {
       newBoard = wordPuzzleGame.addLetter(keyboardKey, board);
     }
 
     if (newBoard !== null) {
+      // If we delete a word from the board, then reset the validatiom
+      // messages.
+      if (board.words.length > newBoard.words.length) {
+        setValidationMessages([]);
+      }
       setBoard(newBoard);
     }
   }
@@ -49,6 +64,11 @@ const WordPuzzleGuessBoard = () => {
   }
 
   const searchClicked = async (): Promise<void> => {
+    const validations = wordPuzzleValidator.validateBoard(board, false);
+    setValidationMessages(validations);
+    if (validations.length > 0) {
+      return;
+    }
 
     try {
       setSearchInProgress(true);
@@ -81,6 +101,14 @@ const WordPuzzleGuessBoard = () => {
           ))
         }
       </div>
+
+      {validationMessages.length > 0 ? (
+        <div className={styles.wordPuzzleValidationContainer}>
+          <ul>
+            {validationMessages.map(m => <li><Text>{m}</Text></li>)}
+          </ul>
+        </div>
+      ) : <></>}
 
       <div className={styles.wordPuzzleBtnContainer}>
         <LoaderButton
