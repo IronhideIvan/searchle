@@ -80,6 +80,38 @@ namespace Wordnet.Data.Queries
         }
       }
 
+      if (SearchQuery.InstanceCounts?.Count() > 0)
+      {
+        // ((length(w.lemma) - length(replace(w.lemma, 'bi', '')) )::int / length('bi')) > 1
+        int index = 0;
+        foreach (var instance in SearchQuery.InstanceCounts)
+        {
+          string equalityOperator = "=";
+          switch (instance.Equality)
+          {
+            case EqualityType.EqualTo:
+              equalityOperator = "=";
+              break;
+            case EqualityType.GreaterThan:
+              equalityOperator = ">";
+              break;
+            case EqualityType.LessThan:
+              equalityOperator = "<";
+              break;
+            case EqualityType.GreaterThanOrEqualTo:
+              equalityOperator = ">=";
+              break;
+            case EqualityType.LessThanOrEqualTo:
+              equalityOperator = "<=";
+              break;
+            default:
+              throw new NotImplementedException($"Unknown EqualityType: {instance.Equality}");
+          }
+
+          query.AddWhere($"(length(w.lemma) - length(replace(w.lemma, :InstanceCount{index}, '')))::int {equalityOperator} {instance.Count}");
+        }
+      }
+
       int limit = SearchQuery.ResultLimit;
       if (SearchQuery.ResultLimit == default(int))
       {
@@ -173,6 +205,16 @@ namespace Wordnet.Data.Queries
         {
           var clause = GetPositionalSearchTerm(term);
           parameters.Add($"MustExcludeAtPosition{index}", clause);
+          ++index;
+        }
+      }
+
+      if (SearchQuery.InstanceCounts?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var instance in SearchQuery.InstanceCounts)
+        {
+          parameters.Add($"InstanceCount{index}", instance.Letter.ToString());
           ++index;
         }
       }

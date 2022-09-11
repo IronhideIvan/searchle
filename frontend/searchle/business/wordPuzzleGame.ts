@@ -1,5 +1,5 @@
 import { WordPuzzleBoard } from "../interfaces/wordPuzzle/wordPuzzleBoard";
-import { WordPuzzleBreakdown } from "../interfaces/wordPuzzle/wordPuzzleBreakdown";
+import { WordPuzzleBreakdown, WordPuzzleLetterInstanceCount } from "../interfaces/wordPuzzle/wordPuzzleBreakdown";
 import { WordPuzzleLetter, WordPuzzleLetterStatus } from "../interfaces/wordPuzzle/wordPuzzleLetter";
 import { WordPuzzleWord } from "../interfaces/wordPuzzle/wordPuzzleWord";
 
@@ -182,6 +182,7 @@ class WordPuzzleGame {
       correctPositionLetters: [],
       incorrectPositionLetters: [],
       invalidLetters: [],
+      instanceCounts: [],
       wordLength: board.wordLength
     };
 
@@ -234,6 +235,32 @@ class WordPuzzleGame {
           const existsIndex = puzzleBreakdown.includesLetters.indexOf(l.letter);
           if (existsIndex < 0) {
             puzzleBreakdown.includesLetters.push(l.letter);
+          }
+        }
+
+        // check that the letter hasn't already been added for multiple instances 
+        if (!puzzleBreakdown.instanceCounts.some(instance => instance.letter === l.letter)) {
+          // Check if we can discern the number of times the letter appears in the word
+          const instancesOfLetter = w.letters.filter(innerLetter =>
+            innerLetter.letter === l.letter
+            && innerLetter.status !== WordPuzzleLetterStatus.Unresolved);
+
+          // Check if at least one of the instances actually exist in the word, otherwise we don't need
+          // to bother doing further checks.
+          const instancesThatDontExistInWord = instancesOfLetter.filter(innerLetter =>
+            innerLetter.status === WordPuzzleLetterStatus.NotExists
+          );
+          if (instancesOfLetter.length > 0 && instancesThatDontExistInWord.length < instancesOfLetter.length) {
+            const instancesThatExistInWord = instancesOfLetter.filter(innerLetter =>
+              innerLetter.status === WordPuzzleLetterStatus.CorrectPosition
+              || innerLetter.status === WordPuzzleLetterStatus.IncorrectPosition
+            );
+
+            puzzleBreakdown.instanceCounts.push({
+              letter: l.letter,
+              count: instancesThatExistInWord.length,
+              isExact: instancesThatDontExistInWord.length > 0
+            })
           }
         }
       });

@@ -19,6 +19,12 @@ export async function doWordSearch(board: WordPuzzleBoard): Promise<WordSearchRe
         ...puzzleBreakdown.incorrectPositionLetters.map((l) => `,${l.letter}|${l.position}`));
   }
 
+  if (puzzleBreakdown.instanceCounts.length > 0) {
+    searchQuery = searchQuery
+      .concat(" cnt:",
+        ...puzzleBreakdown.instanceCounts.map((l) => `,${l.letter}|${l.isExact ? "=" : ">="}|${l.count}`));
+  }
+
   if (puzzleBreakdown.invalidLetters.length > 0) {
     searchQuery = searchQuery
       .concat(" ex:",

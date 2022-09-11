@@ -32,6 +32,7 @@ namespace Searchle.GraphQL.Transformers
       var exactSearch = new List<char>();
       var mustIncludeAtPosition = new List<LexicalSearchSpecificPosition>();
       var mustExcludeAtPosition = new List<LexicalSearchSpecificPosition>();
+      var instanceCounts = new List<LexicalSearchInstanceCount>();
 
       var searchObj = new LexicalSearch
       {
@@ -40,7 +41,8 @@ namespace Searchle.GraphQL.Transformers
         MustInclude = mustInclude,
         ExactSearch = exactSearch,
         MustIncludeAtPosition = mustIncludeAtPosition,
-        MustExcludeAtPosition = mustExcludeAtPosition
+        MustExcludeAtPosition = mustExcludeAtPosition,
+        InstanceCounts = instanceCounts
       };
 
       if (searchQuery == null || searchQuery.Length == 0)
@@ -110,6 +112,9 @@ namespace Searchle.GraphQL.Transformers
           case "dif":
             AddToPositionList(segmentValue, mustExcludeAtPosition);
             break;
+          case "cnt":
+            AddToInstanceCountList(segmentValue, instanceCounts);
+            break;
           case "sp":
             if (segmentValue == "y")
             {
@@ -127,6 +132,83 @@ namespace Searchle.GraphQL.Transformers
       }
 
       return searchObj;
+    }
+
+    private void AddToInstanceCountList(string searchClause, List<LexicalSearchInstanceCount> list)
+    {
+      var segments = searchClause?.Split(",");
+
+      if (segments == null || segments.Length == 0)
+      {
+        return;
+      }
+
+      foreach (var segment in segments)
+      {
+        // Arbitrary sanity check so that we don't filter too many things in one
+        // word and possibly break the query.
+        if (list.Count > 10)
+        {
+          break;
+        }
+
+        // [0] = character
+        // [1] = equality operator
+        // [2] = count
+        var posClause = segment.Split("|");
+        if (posClause.Length < 3)
+        {
+          continue;
+        }
+
+        if (!char.TryParse(posClause[0].Trim(), out char c))
+        {
+          continue;
+        }
+
+        var equalityOperator = posClause[1].Trim();
+        EqualityType equalityType;
+        switch (equalityOperator)
+        {
+          case "=":
+            equalityType = EqualityType.EqualTo;
+            break;
+          case ">":
+            equalityType = EqualityType.GreaterThan;
+            break;
+          case "<":
+            equalityType = EqualityType.LessThan;
+            break;
+          case ">=":
+            equalityType = EqualityType.GreaterThanOrEqualTo;
+            break;
+          case "<=":
+            equalityType = EqualityType.LessThanOrEqualTo;
+            break;
+          default:
+            // Could not be found.
+            continue;
+        }
+
+
+        if (!Int32.TryParse(posClause[2].Trim(), out int count))
+        {
+          continue;
+        }
+
+        // count smaller than 0 is nonsensical, ignore this statement.
+        if (count < 0)
+        {
+          continue;
+        }
+
+        list.Add(new LexicalSearchInstanceCount
+        {
+          Letter = c,
+          Count = count,
+          Equality = equalityType
+        });
+      }
     }
 
     private void AddToPositionList(string searchClause, List<LexicalSearchSpecificPosition> list)
