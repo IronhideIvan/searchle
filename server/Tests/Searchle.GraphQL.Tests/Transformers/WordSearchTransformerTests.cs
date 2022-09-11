@@ -153,6 +153,20 @@ namespace Searchle.GraphQL.Tests.Services
       Assert.Equal(expectedValue, ret.ExcludeSpecialCharacters);
     }
 
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData("l:3")]
+    [InlineData("es:a")]
+    [InlineData("cnt:a|>|2", "a|>|2")]
+    [InlineData("cnt:a|=|2 cnt:b|>|42", "a|=|2", "b|>|42")]
+    [InlineData("l:3 cnt:,a|>|2,b|<=|42,x|>=|80 es:a", "a|>|2", "b|<=|42", "x|>=|80")]
+    public void WordSearchTransformer_ParseQueryString_InstanceCountParses(string query, params string[] expectedCharacters)
+    {
+      var ret = _service.Transform(query);
+      ValidateValuesInCollection(ret.InstanceCounts, expectedCharacters);
+    }
+
     [Fact]
     public void WordSearchTransformer_ParseQueryString_FullQueryParses()
     {
@@ -165,6 +179,59 @@ namespace Searchle.GraphQL.Tests.Services
       Assert.Equal(5, ret.LetterCount);
       Assert.Equal(40, ret.ResultLimit);
       Assert.True(ret.ExcludeSpecialCharacters);
+    }
+
+    private void ValidateValuesInCollection(IEnumerable<LexicalSearchInstanceCount>? collection, IEnumerable<string> expectedValues)
+    {
+      Assert.NotNull(collection);
+
+      if (expectedValues == null || expectedValues.Count() == 0)
+      {
+        Assert.Empty(collection);
+        return;
+      }
+
+      var convertedExpectedValues = expectedValues.Select(v =>
+      {
+        var split = v.Split("|");
+        var equalityOperator = split[1].Trim();
+        EqualityType equalityType;
+        switch (equalityOperator)
+        {
+          case "=":
+            equalityType = EqualityType.EqualTo;
+            break;
+          case ">":
+            equalityType = EqualityType.GreaterThan;
+            break;
+          case "<":
+            equalityType = EqualityType.LessThan;
+            break;
+          case ">=":
+            equalityType = EqualityType.GreaterThanOrEqualTo;
+            break;
+          case "<=":
+            equalityType = EqualityType.LessThanOrEqualTo;
+            break;
+          default:
+            throw new Exception();
+        }
+
+        return new LexicalSearchInstanceCount
+        {
+          Letter = char.Parse(split[0]),
+          Equality = equalityType,
+          Count = Int32.Parse(split[2])
+        };
+      });
+
+      Assert.NotEmpty(collection);
+      Assert.Equal(expectedValues.Count(), collection!.Count());
+
+      foreach (var e in convertedExpectedValues)
+      {
+        Assert.True(collection!.Any(c => e.Letter == c.Letter && e.Count == c.Count && e.Equality == c.Equality), $"The value '{e.Letter}' with count '{e.Count}' was expected in collection but was not found.");
+      }
     }
 
     private void ValidateValuesInCollection(IEnumerable<LexicalSearchSpecificPosition>? collection, IEnumerable<string> expectedValues)
