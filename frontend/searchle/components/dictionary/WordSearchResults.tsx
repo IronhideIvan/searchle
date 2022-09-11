@@ -1,4 +1,6 @@
-import { Table } from "@nextui-org/react";
+import styles from "./WordSearchResults.module.scss";
+import { Table, Text } from "@nextui-org/react";
+import { Key } from "react";
 import { WordSearchWord } from "../../interfaces/api/wordSearchResult";
 
 interface WordSearchResultsProps {
@@ -9,6 +11,20 @@ const WordSearchResults = (props: WordSearchResultsProps) => {
   const columns = [
     { name: "Word", uid: "word" }
   ];
+
+  const getCellContents = (word: WordSearchWord, columnKey: Key): JSX.Element => {
+    const wordKey = columnKey as keyof typeof word;
+
+    if (columnKey === "word") {
+      return (
+        <Text className={styles.wordSearchWord}>{word[wordKey]}</Text>
+      );
+    }
+
+    return (
+      <Text>{word[wordKey]}</Text>
+    );
+  }
 
   return (
     <Table
@@ -31,7 +47,7 @@ const WordSearchResults = (props: WordSearchResultsProps) => {
         {(w) => (
           <Table.Row key={w.id}>
             {(columnKey) => {
-              return <Table.Cell>{w[columnKey as keyof typeof w]}</Table.Cell>;
+              return <Table.Cell>{getCellContents(w, columnKey)}</Table.Cell>;
             }}
           </Table.Row>
         )}
