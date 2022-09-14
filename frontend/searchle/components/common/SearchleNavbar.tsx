@@ -13,7 +13,7 @@ const SearchleNavbar = () => {
       </Navbar.Brand>
 
       <Navbar.Content>
-        <Navbar.Item>
+        <Navbar.Item id="navbar-help-btn">
           <Button auto flat>Help</Button>
         </Navbar.Item>
       </Navbar.Content>
