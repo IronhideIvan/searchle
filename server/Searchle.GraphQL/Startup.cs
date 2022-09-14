@@ -7,19 +7,19 @@ using Searchle.DataAccess.Postgres;
 using Searchle.GraphQL.Resolvers;
 using NetCore.AutoRegisterDi;
 using System.Reflection;
+using Searchle.GraphQL.Filters;
 
 namespace Searchle.GraphQL
 {
   public class Startup
   {
-    // This method gets called by the runtime. Use this method to add services to the container.
-    // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddGraphQLServer()
+      services.AddGraphQLServer(maxAllowedRequestSize: 10000)
         .AddGlobalObjectIdentification()
         .AddQueryType<GraphQLQuery>()
-        .AddTypeExtension<DictionaryResolver>();
+        .AddTypeExtension<DictionaryResolver>()
+        .AddErrorFilter<SearchleErrorFilter>();
 
       var assembliesToScan = new[]{
         Assembly.GetExecutingAssembly(),
