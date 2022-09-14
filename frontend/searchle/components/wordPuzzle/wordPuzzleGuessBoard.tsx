@@ -79,6 +79,11 @@ const WordPuzzleGuessBoard = () => {
       if (apiErrorProcessor.hasErrors(results)) {
         setValidationMessages(apiErrorProcessor.extractErrorMessages(results));
       }
+      else if (!results.data
+        || !results.data.wordSearch
+        || results.data.wordSearch.length === 0) {
+        setValidationMessages(["No Results Found"]);
+      }
       else {
         setSearchResults(results.data!);
         setResultsVisible(true);
