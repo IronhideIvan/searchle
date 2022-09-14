@@ -6,13 +6,14 @@ import React, { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "../../business/wordPuzzleGame";
-import { Modal, Text } from "@nextui-org/react";
+import { Text } from "@nextui-org/react";
 import { doWordSearch } from "../../business/wordPuzzleSearch";
 import { WordSearchResult } from "../../interfaces/api/wordSearchResult";
 import WordSearchResults from "../dictionary/WordSearchResults";
 import LoaderButton from "../common/LoaderButton";
 import { convertToKeyboardKey } from "../../interfaces/keyboard/keyboardKeysConverter";
 import { wordPuzzleValidator } from "../../business/WordPuzzleValidator";
+import ResponsiveModal from "../common/ResponsiveModal";
 
 const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
@@ -105,7 +106,9 @@ const WordPuzzleGuessBoard = () => {
       {validationMessages.length > 0 ? (
         <div className={styles.wordPuzzleValidationContainer}>
           <ul>
-            {validationMessages.map(m => <li><Text>{m}</Text></li>)}
+            {
+              validationMessages.map((m, index) => <li key={"val-" + index}><Text>{m}</Text></li>)
+            }
           </ul>
         </div>
       ) : <></>}
@@ -124,9 +127,8 @@ const WordPuzzleGuessBoard = () => {
 
       <PuzzleKeyboard onKeyPressed={virtualKeyboardKeyPressed} />
 
-      <Modal
+      <ResponsiveModal
         closeButton
-        fullScreen
         aria-label="Popup with search results"
         open={resultsVisible}
         onClose={closeModal}
@@ -134,7 +136,7 @@ const WordPuzzleGuessBoard = () => {
         <div className={styles.searchResultsContainer}>
           <WordSearchResults words={searchResults.wordSearch} />
         </div>
-      </Modal>
+      </ResponsiveModal>
     </div>
   )
 }
