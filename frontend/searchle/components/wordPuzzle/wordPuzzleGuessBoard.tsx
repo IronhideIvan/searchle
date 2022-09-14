@@ -14,6 +14,7 @@ import LoaderButton from "../common/LoaderButton";
 import { convertToKeyboardKey } from "../../interfaces/keyboard/keyboardKeysConverter";
 import { wordPuzzleValidator } from "../../business/WordPuzzleValidator";
 import ResponsiveModal from "../common/ResponsiveModal";
+import { apiErrorProcessor } from "../../business/apiErrorProcessor";
 
 const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
@@ -74,11 +75,19 @@ const WordPuzzleGuessBoard = () => {
     try {
       setSearchInProgress(true);
       const results = await doWordSearch(board);
-      setSearchResults(results);
-      setResultsVisible(true);
+
+      if (apiErrorProcessor.hasErrors(results)) {
+        setValidationMessages(apiErrorProcessor.extractErrorMessages(results));
+      }
+      else {
+        setSearchResults(results.data!);
+        setResultsVisible(true);
+      }
     }
     finally {
-      setSearchInProgress(false);
+      setTimeout(() => {
+        setSearchInProgress(false);
+      }, 1000);
     }
   }
 

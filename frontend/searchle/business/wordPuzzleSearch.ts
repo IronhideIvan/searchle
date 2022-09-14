@@ -1,9 +1,10 @@
 import { searchWords } from "../apis/dictionaryApi";
+import { GraphQLResponse } from "../interfaces/api/graphQLResponse";
 import { WordSearchResult, WordSearchWord } from "../interfaces/api/wordSearchResult";
 import { WordPuzzleBoard } from "../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "./wordPuzzleGame";
 
-export async function doWordSearch(board: WordPuzzleBoard): Promise<WordSearchResult> {
+export async function doWordSearch(board: WordPuzzleBoard): Promise<GraphQLResponse<WordSearchResult>> {
   const puzzleBreakdown = wordPuzzleGame.getPuzzleBreakdown(board);
   let searchQuery = `l:${puzzleBreakdown.wordLength} r:50 sp:y`;
 
