@@ -50,13 +50,19 @@
 .wordPuzzleBtnContainer {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+
+  @include screen-min-width($screen-xs) {
+    flex-direction: row;
+  }
 }
 
-.wordPuzzleSearchBtn {
-  width: 20rem;
+.wordPuzzleBtn {
+  // width: 20rem;
+  display: flex;
+  margin: 5px;
 
   @include screen-min-width(760px) {
-    margin-bottom: 10px;
     height: 3rem;
     font-size: 1.2rem;
   }

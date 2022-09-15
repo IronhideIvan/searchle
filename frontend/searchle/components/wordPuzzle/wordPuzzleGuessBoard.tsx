@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "../../business/wordPuzzleGame";
-import { Text } from "@nextui-org/react";
+import { Button, Grid, Text } from "@nextui-org/react";
 import { doWordSearch } from "../../business/wordPuzzleSearch";
 import { WordSearchResult } from "../../interfaces/api/wordSearchResult";
 import WordSearchResults from "../dictionary/WordSearchResults";
@@ -15,6 +15,7 @@ import { convertToKeyboardKey } from "../../interfaces/keyboard/keyboardKeysConv
 import { wordPuzzleValidator } from "../../business/WordPuzzleValidator";
 import ResponsiveModal from "../common/ResponsiveModal";
 import { apiErrorProcessor } from "../../business/apiErrorProcessor";
+import ConfirmationButton from "../common/ConfirmationButton";
 
 const WordPuzzleGuessBoard = () => {
   const [board, setBoard] = useState<WordPuzzleBoard>(wordPuzzleGame.createBoard(5));
@@ -102,6 +103,10 @@ const WordPuzzleGuessBoard = () => {
     setResultsVisible(false);
   }
 
+  const clearBoard = (): void => {
+    setBoard(wordPuzzleGame.createBoard(5));
+  }
+
   return (
     <div className={styles.wordPuzzleBoardContainer}
       onKeyUp={physicalKeyboardKeyPressed}
@@ -134,11 +139,23 @@ const WordPuzzleGuessBoard = () => {
           color={"primary"}
           ghost={true}
           onPress={searchClicked}
-          className={styles.wordPuzzleSearchBtn}
+          className={styles.wordPuzzleBtn}
           isLoading={searchInProgress}
         >
           Search
         </LoaderButton>
+        <ConfirmationButton
+          color={"error"}
+          ghost
+          className={styles.wordPuzzleBtn}
+          onConfirmed={clearBoard}
+          dialogConfirmText={"Clear"}
+          dialogConfirmBtnColor={"error"}
+          dialogCancelBtnColor={"default"}
+          dialogContents={<Text>Are you sure you want to clear your search?</Text>}
+        >
+          Clear
+        </ConfirmationButton>
       </div>
 
       <PuzzleKeyboard onKeyPressed={virtualKeyboardKeyPressed} />
