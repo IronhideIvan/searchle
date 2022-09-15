@@ -36,13 +36,15 @@ const WordPuzzleGuessBoard = () => {
     else if (keyboardKey === KeyboardKeys.Enter) {
       const latestWord = board.words[board.words.length - 1];
       const validations = wordPuzzleValidator.validateWord(latestWord, true);
+      if (validations.length === 0) {
+        if (board.words.length > 10) {
+          validations.push("No more than ten words are allowed at a time");
+        }
+        else {
+          newBoard = wordPuzzleGame.addNewWord(board);
+        }
+      }
       setValidationMessages(validations);
-      if (validations.length > 0) {
-        return;
-      }
-      else {
-        newBoard = wordPuzzleGame.addNewWord(board);
-      }
     }
     else {
       newBoard = wordPuzzleGame.addLetter(keyboardKey, board);
