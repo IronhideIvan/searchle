@@ -30,6 +30,7 @@
 
 .puzzleLetter {
   display: flex;
+  margin: 0 !important;
   font-size: 2rem;
   cursor: inherit;
   justify-content: center;
@@ -59,9 +60,4 @@
     height: 3rem;
     font-size: 1.2rem;
   }
-}
-
-.searchResultsContainer {
-  margin-top: 30px;
-  overflow: scroll;
 }

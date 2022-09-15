@@ -1,3 +1,4 @@
+import styles from "./ResponsiveModal.module.scss"
 import { Modal, ModalProps } from "@nextui-org/react";
 import React from "react";
 import { useState } from "react";
@@ -16,7 +17,9 @@ const ResponsiveModal = ({ children, ...props }: Props) => {
       {...props}
       fullScreen={screenWidth < 768}
     >
-      {children}
+      <div className={styles.responsiveModalContents}>
+        {children}
+      </div>
     </Modal>
   );
 }

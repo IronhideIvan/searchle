@@ -68,9 +68,9 @@ class WordPuzzleGame {
   cycleLetterStatus(letter: WordPuzzleLetter): WordPuzzleBoard {
     let newStatus = this.getNextLetterStatus(letter.status);
 
-    const word = letter.parent;
+    const word = letter.parent!;
 
-    const boardCopy = deepCopy(word.parent);
+    const boardCopy = deepCopy(word.parent!);
     const wordCopy = boardCopy.words[word.index];
     const oldLetterCopy = wordCopy.letters[letter.index];
 

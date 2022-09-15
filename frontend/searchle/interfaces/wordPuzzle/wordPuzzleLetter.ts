@@ -11,5 +11,5 @@ export interface WordPuzzleLetter {
   letter: string;
   status: WordPuzzleLetterStatus;
   index: number;
-  parent: WordPuzzleWord;
+  parent?: WordPuzzleWord;
 }
