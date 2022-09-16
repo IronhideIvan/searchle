@@ -1,0 +1,73 @@
+@import "./../../styles/mixins";
+@import "./../../styles/variables.module";
+
+.puzzleKeyboardContainer {
+  padding: 3px;
+}
+
+.puzzleKeyboardRow {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.puzzleKey {
+  margin: 3px;
+  border: none;
+  min-height: 2rem;
+  min-width: 1.4rem;
+  border-radius: 5px;
+  padding: 0;
+  cursor: pointer;
+  @include disable-select();
+
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+
+  &:active {
+    background-color: $keyboard-btn-active;
+
+    -webkit-transition-duration: 0s;
+    transition-duration: 0s;
+  }
+
+  @include screen-min-width(340px) {
+    min-width: 1.6rem;
+  }
+
+  @include screen-min-width(375px) {
+    min-width: 1.8rem;
+  }
+
+  @include screen-min-width(414px) {
+    min-width: 2rem;
+  }
+
+  @include screen-min-width($screen-xs) {
+    min-width: 3rem;
+  }
+
+  @include screen-min-width($screen-s) {
+    min-width: 4rem;
+    margin: 4px;
+  }
+
+  @include screen-min-height($screen-xs) {
+    min-height: 3rem;
+  }
+}
+
+.puzzleKeyLetter {
+  vertical-align: middle;
+  margin: 0;
+  font-size: 0.9rem;
+
+  @include screen-min-width(375px) {
+    margin: 1px;
+    font-size: 1rem;
+  }
+
+  @include screen-min-width($screen-s) {
+    font-size: 1.3rem;
+  }
+}

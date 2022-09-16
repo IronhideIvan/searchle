@@ -60,6 +60,58 @@ namespace Wordnet.Data.Queries
         query.AddWhere("w.lemma like :ExactSearch");
       }
 
+      if (SearchQuery.MustIncludeAtPosition?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var term in SearchQuery.MustIncludeAtPosition)
+        {
+          query.AddWhere($"w.lemma like :MustIncludeAtPosition{index}");
+          ++index;
+        }
+      }
+
+      if (SearchQuery.MustExcludeAtPosition?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var term in SearchQuery.MustExcludeAtPosition)
+        {
+          query.AddWhere($"w.lemma not like :MustExcludeAtPosition{index}");
+          ++index;
+        }
+      }
+
+      if (SearchQuery.InstanceCounts?.Count() > 0)
+      {
+        // ((length(w.lemma) - length(replace(w.lemma, 'bi', '')) )::int / length('bi')) > 1
+        int index = 0;
+        foreach (var instance in SearchQuery.InstanceCounts)
+        {
+          string equalityOperator = "=";
+          switch (instance.Equality)
+          {
+            case EqualityType.EqualTo:
+              equalityOperator = "=";
+              break;
+            case EqualityType.GreaterThan:
+              equalityOperator = ">";
+              break;
+            case EqualityType.LessThan:
+              equalityOperator = "<";
+              break;
+            case EqualityType.GreaterThanOrEqualTo:
+              equalityOperator = ">=";
+              break;
+            case EqualityType.LessThanOrEqualTo:
+              equalityOperator = "<=";
+              break;
+            default:
+              throw new NotImplementedException($"Unknown EqualityType: {instance.Equality}");
+          }
+
+          query.AddWhere($"(length(w.lemma) - length(replace(w.lemma, :InstanceCount{index}, '')))::int {equalityOperator} {instance.Count}");
+        }
+      }
+
       int limit = SearchQuery.ResultLimit;
       if (SearchQuery.ResultLimit == default(int))
       {
@@ -135,7 +187,51 @@ namespace Wordnet.Data.Queries
         parameters.Add($"ExactSearch", sb.ToString());
       }
 
+      if (SearchQuery.MustIncludeAtPosition?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var term in SearchQuery.MustIncludeAtPosition)
+        {
+          var clause = GetPositionalSearchTerm(term);
+          parameters.Add($"MustIncludeAtPosition{index}", clause);
+          ++index;
+        }
+      }
+
+      if (SearchQuery.MustExcludeAtPosition?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var term in SearchQuery.MustExcludeAtPosition)
+        {
+          var clause = GetPositionalSearchTerm(term);
+          parameters.Add($"MustExcludeAtPosition{index}", clause);
+          ++index;
+        }
+      }
+
+      if (SearchQuery.InstanceCounts?.Count() > 0)
+      {
+        int index = 0;
+        foreach (var instance in SearchQuery.InstanceCounts)
+        {
+          parameters.Add($"InstanceCount{index}", instance.Letter.ToString());
+          ++index;
+        }
+      }
+
       return parameters;
+    }
+
+    private string GetPositionalSearchTerm(LexicalSearchSpecificPosition term)
+    {
+      var sb = new StringBuilder();
+      for (int i = 0; i < term.Position; ++i)
+      {
+        sb.Append("_");
+      }
+
+      sb.Append(term.Letter + "%");
+      return sb.ToString();
     }
 
     private string GetRegexSanitizedChar(char input)
