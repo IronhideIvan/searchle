@@ -203,8 +203,10 @@ class WordPuzzleGame {
         // If the letter doesn't exist in the word, then add it to the
         // appropriate array if it isn't already added.
         else if (l.status === WordPuzzleLetterStatus.NotExists) {
-          let existsIndex = puzzleBreakdown.invalidLetters.indexOf(l.letter);
-          if (existsIndex < 0) {
+          if (
+            !puzzleBreakdown.invalidLetters.some(innerLetter => innerLetter === l.letter)
+            && !puzzleBreakdown.instanceCounts.some(instance => instance.letter === l.letter)
+          ) {
             puzzleBreakdown.invalidLetters.push(l.letter);
           }
         }
@@ -250,16 +252,25 @@ class WordPuzzleGame {
           const instancesThatDontExistInWord = instancesOfLetter.filter(innerLetter =>
             innerLetter.status === WordPuzzleLetterStatus.NotExists
           );
-          if (instancesOfLetter.length > 0 && instancesThatDontExistInWord.length < instancesOfLetter.length) {
+          if (instancesOfLetter.length > 1 && instancesThatDontExistInWord.length < instancesOfLetter.length) {
             const instancesThatExistInWord = instancesOfLetter.filter(innerLetter =>
               innerLetter.status === WordPuzzleLetterStatus.CorrectPosition
               || innerLetter.status === WordPuzzleLetterStatus.IncorrectPosition
             );
 
+            const isExact: boolean = instancesThatDontExistInWord.length > 0;
+            // Remove the letter from "Not Exists" collection so that 
+            // we don't accidentally tell the search engine that this letter
+            // both exists and it doesn't... as that will return no results.
+            if (isExact) {
+              puzzleBreakdown.invalidLetters = puzzleBreakdown.invalidLetters
+                .filter(innerLetter => l.letter !== innerLetter);
+            }
+
             puzzleBreakdown.instanceCounts.push({
               letter: l.letter,
               count: instancesThatExistInWord.length,
-              isExact: instancesThatDontExistInWord.length > 0
+              isExact: isExact
             })
           }
         }
