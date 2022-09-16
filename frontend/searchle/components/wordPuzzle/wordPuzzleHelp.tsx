@@ -171,7 +171,7 @@ const WordPuzzleHelp = (props: Props) => {
       </Text>
       <Text>
         Once you've set the status for all of your letters you can go ahead and hit the search button
-        to see what words this could possible be.
+        to see what words this could possibly be.
       </Text>
       <Text b>
         OR
