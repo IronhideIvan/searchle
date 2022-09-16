@@ -31,33 +31,35 @@ const WordPuzzleHelp = (props: Props) => {
           {
             letter: "D",
             index: 0,
-            status: WordPuzzleLetterStatus.Unresolved
+            status: WordPuzzleLetterStatus.NotExists
           },
           {
             letter: "R",
             index: 1,
-            status: WordPuzzleLetterStatus.Unresolved
+            status: WordPuzzleLetterStatus.NotExists
           },
           {
             letter: "I",
             index: 2,
-            status: WordPuzzleLetterStatus.Unresolved
+            status: WordPuzzleLetterStatus.NotExists
           },
           {
             letter: "V",
             index: 3,
-            status: WordPuzzleLetterStatus.Unresolved
+            status: WordPuzzleLetterStatus.NotExists
           },
           {
             letter: "E",
             index: 4,
-            status: WordPuzzleLetterStatus.Unresolved
+            status: WordPuzzleLetterStatus.NotExists
           }
         ]}
       />
       <Text className={styles.topMargin}>
-        Unfortunately, we're not done yet. We can't search for the word until we set each letter to one of
-        3 statuses. We do this by clicking on the letter to cycle between each status. Now, what are the
+        If you perform a search now you will be given a list of words that don't contain any of the
+        letters in the word. Why? Because the default status of a letter (which you can identify from the
+        black background) means that this letter does not exist in the word. If we want to change the status,
+        we can do so by clicking on a letter to cycle it between three possible statuses. Now, what are the
         statuses and what do they mean, you might be asking? Well, they are:
       </Text>
       <WordPuzzleGuessWord

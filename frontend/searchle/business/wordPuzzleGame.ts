@@ -59,7 +59,7 @@ class WordPuzzleGame {
       newStatus = WordPuzzleLetterStatus.NotExists;
     }
     else if (status === WordPuzzleLetterStatus.NotExists) {
-      newStatus = WordPuzzleLetterStatus.Unresolved;
+      newStatus = WordPuzzleLetterStatus.CorrectPosition;
     }
 
     return newStatus;
@@ -97,7 +97,7 @@ class WordPuzzleGame {
       return {
         letter: this.defaultLetter,
         index: i,
-        status: WordPuzzleLetterStatus.Unresolved,
+        status: WordPuzzleLetterStatus.NotExists,
         parent: word
       }
     });
