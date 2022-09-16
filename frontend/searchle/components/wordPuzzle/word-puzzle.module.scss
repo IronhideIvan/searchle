@@ -35,9 +35,7 @@
   cursor: inherit;
   justify-content: center;
   vertical-align: middle;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
+  @include disable-select()
 }
 
 .puzzleLetterBox {

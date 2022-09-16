@@ -18,6 +18,8 @@
   min-width: 1.4rem;
   border-radius: 5px;
   padding: 0;
+  cursor: pointer;
+  @include disable-select();
 
   -webkit-transition-duration: 0.2s;
   transition-duration: 0.2s;
