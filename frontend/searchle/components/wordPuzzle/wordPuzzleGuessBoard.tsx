@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import WordPuzzleGuessWord from "./wordPuzzleGuessWord";
 import { WordPuzzleBoard } from "../../interfaces/wordPuzzle/wordPuzzleBoard";
 import { wordPuzzleGame } from "../../business/wordPuzzleGame";
-import { Button, Grid, Text } from "@nextui-org/react";
+import { Text } from "@nextui-org/react";
 import { doWordSearch } from "../../business/wordPuzzleSearch";
 import { WordSearchResult } from "../../interfaces/api/wordSearchResult";
 import WordSearchResults from "../dictionary/WordSearchResults";
@@ -105,6 +105,7 @@ const WordPuzzleGuessBoard = () => {
 
   const clearBoard = (): void => {
     setBoard(wordPuzzleGame.createBoard(5));
+    setValidationMessages([]);
   }
 
   return (
