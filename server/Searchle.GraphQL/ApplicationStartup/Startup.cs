@@ -8,43 +8,42 @@ using Searchle.GraphQL.Resolvers;
 using NetCore.AutoRegisterDi;
 using System.Reflection;
 using Searchle.GraphQL.Filters;
+using Searchle.GraphQL.Logging;
+using Searchle.Common.Logging;
 
-namespace Searchle.GraphQL
+namespace Searchle.GraphQL.ApplicationStartup
 {
   public class Startup
   {
     public void ConfigureServices(IServiceCollection services)
     {
+      var startupLoggerFactory = new SerilogLoggerFactory(new AppLoggingConfig
+      {
+        LogLevel = AppLogLevel.Debug
+      });
+
       services.AddGraphQLServer(maxAllowedRequestSize: 10000)
         .AddGlobalObjectIdentification()
         .AddQueryType<GraphQLQuery>()
         .AddTypeExtension<DictionaryResolver>()
         .AddErrorFilter<SearchleErrorFilter>();
 
-      var assembliesToScan = new[]{
-        Assembly.GetExecutingAssembly(),
-        Assembly.GetAssembly(typeof(LexicalWordService)),
-        Assembly.GetAssembly(typeof(WordnetLexicalWordDao))
-      };
+      services.LoadConfiguration(startupLoggerFactory.Create<Startup>());
+      var appConfig = services.BuildServiceProvider().GetService<SearchleAppConfig>();
 
-      services.RegisterAssemblyPublicNonGenericClasses(assembliesToScan)
-        .Where(c =>
-          // Object mappers
-          c.Name.EndsWith("Transformer")
-          // Data access objects
-          || c.Name.EndsWith("Dao")
-          // Services
-          || c.Name.EndsWith("Service")
-        )
-        .IgnoreThisInterface<DataAccess.Common.Interfaces.IQuery>()
-        .AsPublicImplementedInterfaces();
+      // Add loggers
+      services.AddSingleton<IAppLoggerFactory, SerilogLoggerFactory>();
+
+      services.AddDomainServices();
 
       // Data providers
       services.AddTransient<IDictionaryDataProvider, WordnetDataProvider>(f =>
-        new WordnetDataProvider(new PostgresDataProvider(new PostgresConnectionConfig
-        {
-          ConnectionString = "Server=localhost;Port=5432;User Id=wordnet30_admin;Password=password!1;Database=wordnet30"
-        })));
+        new WordnetDataProvider(
+          new PostgresDataProvider(
+            appConfig!.DictionaryConnectionConfig!,
+            f.GetService<IAppLoggerFactory>()!
+            )
+          ));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
