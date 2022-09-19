@@ -8,7 +8,7 @@ namespace Searchle.GraphQL.ApplicationStartup
 {
   public static class ConfigurationLoader
   {
-    public static SearchleAppConfig LoadConfiguration(this IServiceCollection services, IAppLogger<Startup> logger)
+    public static SearchleAppConfig LoadConfiguration(this IServiceCollection services, IAppLogger<Startup> logger, IWebHostEnvironment env)
     {
       string configurationPath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
       logger.Debug("Searching for configuration at {ConfigurationLocation}", configurationPath);
@@ -19,11 +19,41 @@ namespace Searchle.GraphQL.ApplicationStartup
         throw new SearchleCriticalException("Unable to locate application configuration");
       }
 
-      logger.Information("Configuration found at {ConfigurationLocation}", configurationPath);
+      logger.Debug("Configuration found at {ConfigurationLocation}", configurationPath);
       var configFileContents = File.ReadAllText(configurationPath);
-      var fullConfig = JsonConvert.DeserializeObject<JObject>(configFileContents);
+      var baseConfig = JsonConvert.DeserializeObject<JObject>(configFileContents);
+      if (baseConfig == null)
+      {
+        logger.Critical("Unable to parse configuation file. File located in {ConfigurationLocation}", configurationPath);
+        throw new SearchleCriticalException("Unable to parse configuration file.");
+      }
 
-      var appConfig = fullConfig?["AppConfig"]?.ToObject<SearchleAppConfig>();
+      // look for environment configuration
+      string environmentConfigPath = Path.Combine(Directory.GetCurrentDirectory(), $"appsettings.{env.EnvironmentName}.json");
+      if (File.Exists(environmentConfigPath))
+      {
+        var envConfigContents = File.ReadAllText(environmentConfigPath);
+        var envConfig = JsonConvert.DeserializeObject<JObject>(envConfigContents);
+        if (envConfig != null)
+        {
+          baseConfig.Merge(envConfig,
+            new JsonMergeSettings
+            {
+              MergeArrayHandling = MergeArrayHandling.Union
+            });
+          logger.Debug("Loaded envionment configuration file from path {EnvironmentConfigurationLocation}", environmentConfigPath);
+        }
+        else
+        {
+          logger.Error("Unable to parse environment configuation file. File located in {EnvironmentConfigurationLocation}", environmentConfigPath);
+        }
+      }
+      else
+      {
+        logger.Debug("No environment specific configuration detected. Path searched: {EnvironmentConfigurationLocation}", environmentConfigPath);
+      }
+
+      var appConfig = baseConfig?["AppConfig"]?.ToObject<SearchleAppConfig>();
       if (appConfig == null)
       {
         logger.Critical("Unable to read application configuration details within configuation file. File located in {ConfigurationLocation}", configurationPath);
@@ -39,6 +69,7 @@ namespace Searchle.GraphQL.ApplicationStartup
       }
       else
       {
+        logger.Warning("No logging configuration found. Falling back to default logging configuration");
         var loggingConfig = new AppLoggingConfig
         {
           LogLevel = AppLogLevel.Error

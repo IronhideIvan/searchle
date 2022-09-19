@@ -15,6 +15,13 @@ namespace Searchle.GraphQL.ApplicationStartup
 {
   public class Startup
   {
+    private IWebHostEnvironment _environment;
+
+    public Startup(IWebHostEnvironment environment)
+    {
+      _environment = environment;
+    }
+
     public void ConfigureServices(IServiceCollection services)
     {
       var startupLoggerFactory = new SerilogLoggerFactory(new AppLoggingConfig
@@ -32,7 +39,7 @@ namespace Searchle.GraphQL.ApplicationStartup
 
       try
       {
-        var appConfig = services.LoadConfiguration(startupLoggerFactory.Create<Startup>());
+        var appConfig = services.LoadConfiguration(startupLoggerFactory.Create<Startup>(), _environment);
 
         // Add loggers
         services.AddSingleton<IAppLoggerFactory, SerilogLoggerFactory>();
