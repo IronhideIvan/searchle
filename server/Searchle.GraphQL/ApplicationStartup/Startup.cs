@@ -35,7 +35,10 @@ namespace Searchle.GraphQL.ApplicationStartup
         .AddGlobalObjectIdentification()
         .AddQueryType<GraphQLQuery>()
         .AddTypeExtension<DictionaryResolver>()
-        .AddErrorFilter<SearchleErrorFilter>();
+        .AddErrorFilter<SearchleErrorFilter>((f) =>
+        {
+          return new SearchleErrorFilter(f.GetService<IAppLoggerFactory>()!);
+        });
 
       try
       {
