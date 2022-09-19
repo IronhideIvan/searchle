@@ -4,6 +4,7 @@ using Searchle.Dictionary.Common.Models;
 using Searchle.Dictionary.Business.Services;
 using Searchle.GraphQL.Schema;
 using Searchle.GraphQL.Schema.QueryTypes;
+using Searchle.Common.Logging;
 
 namespace Searchle.GraphQL.Resolvers
 {
@@ -57,9 +58,13 @@ namespace Searchle.GraphQL.Resolvers
       string queryString,
       [Service] ILexicalSearchService searchService,
       [Service] IObjectTransformer<LexicalWord, DictionaryWord> wordTransformer,
-      [Service] IObjectTransformer<string, LexicalSearch> queryTransformer
+      [Service] IObjectTransformer<string, LexicalSearch> queryTransformer,
+      [Service] IAppLoggerFactory loggerFactory
       )
     {
+      var logger = loggerFactory.Create<DictionaryResolver>();
+      logger.Debug("Method: {MethodName}, Query: {QueryString}", nameof(GetWordSearch), queryString);
+
       if (string.IsNullOrWhiteSpace(queryString))
       {
         return new DictionaryWord[] { };

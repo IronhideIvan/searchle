@@ -6,5 +6,10 @@ namespace Searchle.Common.Exceptions
     {
 
     }
+
+    public SearchleDomainException(string message, Exception inner) : base(message, inner)
+    {
+
+    }
   }
 }
