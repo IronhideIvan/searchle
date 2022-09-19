@@ -93,20 +93,20 @@ namespace Searchle.GraphQL.Logging
         switch (logAsLevel)
         {
           case AppLogLevel.Debug:
-            _logger.Debug(ex, messageTemplate, newProps);
+            _logger.Debug(ex, logMessage, newProps);
             break;
 
           case AppLogLevel.Information:
-            _logger.Information(ex, messageTemplate, newProps);
+            _logger.Information(ex, logMessage, newProps);
             break;
 
           case AppLogLevel.Warning:
-            _logger.Warning(ex, messageTemplate, newProps);
+            _logger.Warning(ex, logMessage, newProps);
             break;
 
           case AppLogLevel.Error:
           case AppLogLevel.Critical:
-            _logger.Error(ex, messageTemplate, newProps);
+            _logger.Error(ex, logMessage, newProps);
             break;
 
           default:

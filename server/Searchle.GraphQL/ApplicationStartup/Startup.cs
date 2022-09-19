@@ -22,28 +22,36 @@ namespace Searchle.GraphQL.ApplicationStartup
         LogLevel = AppLogLevel.Debug
       });
 
+      var logger = startupLoggerFactory.Create<Startup>();
+
       services.AddGraphQLServer(maxAllowedRequestSize: 10000)
         .AddGlobalObjectIdentification()
         .AddQueryType<GraphQLQuery>()
         .AddTypeExtension<DictionaryResolver>()
         .AddErrorFilter<SearchleErrorFilter>();
 
-      services.LoadConfiguration(startupLoggerFactory.Create<Startup>());
-      var appConfig = services.BuildServiceProvider().GetService<SearchleAppConfig>();
+      try
+      {
+        var appConfig = services.LoadConfiguration(startupLoggerFactory.Create<Startup>());
 
-      // Add loggers
-      services.AddSingleton<IAppLoggerFactory, SerilogLoggerFactory>();
+        // Add loggers
+        services.AddSingleton<IAppLoggerFactory, SerilogLoggerFactory>();
+        services.AddDomainServices();
 
-      services.AddDomainServices();
-
-      // Data providers
-      services.AddTransient<IDictionaryDataProvider, WordnetDataProvider>(f =>
-        new WordnetDataProvider(
-          new PostgresDataProvider(
-            appConfig!.DictionaryConnectionConfig!,
-            f.GetService<IAppLoggerFactory>()!
-            )
-          ));
+        // Data providers
+        services.AddTransient<IDictionaryDataProvider, WordnetDataProvider>(f =>
+          new WordnetDataProvider(
+            new PostgresDataProvider(
+              appConfig!.DictionaryConnectionConfig!,
+              f.GetService<IAppLoggerFactory>()!
+              )
+            ));
+      }
+      catch (Exception ex)
+      {
+        logger.Critical("Error in startup: {Message}", ex, new { Message = ex.Message });
+        throw;
+      }
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

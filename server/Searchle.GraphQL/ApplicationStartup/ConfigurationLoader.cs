@@ -8,7 +8,7 @@ namespace Searchle.GraphQL.ApplicationStartup
 {
   public static class ConfigurationLoader
   {
-    public static IServiceCollection LoadConfiguration(this IServiceCollection services, IAppLogger<Startup> logger)
+    public static SearchleAppConfig LoadConfiguration(this IServiceCollection services, IAppLogger<Startup> logger)
     {
       string configurationPath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
       logger.Debug("Searching for configuration at {ConfigurationLocation}", configurationPath);
@@ -20,7 +20,8 @@ namespace Searchle.GraphQL.ApplicationStartup
       }
 
       logger.Information("Configuration found at {ConfigurationLocation}", configurationPath);
-      var fullConfig = JsonConvert.DeserializeObject<JObject>(configurationPath);
+      var configFileContents = File.ReadAllText(configurationPath);
+      var fullConfig = JsonConvert.DeserializeObject<JObject>(configFileContents);
 
       var appConfig = fullConfig?["AppConfig"]?.ToObject<SearchleAppConfig>();
       if (appConfig == null)
@@ -50,7 +51,7 @@ namespace Searchle.GraphQL.ApplicationStartup
         throw new SearchleCriticalException("Unable to find dictionary connection details in configuration file.");
       }
 
-      return services;
+      return appConfig;
     }
   }
 }
