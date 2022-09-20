@@ -72,12 +72,15 @@ namespace Searchle.GraphQL.ApplicationStartup
         app.UseDeveloperExceptionPage();
       }
 
+      var appConfig = app.ApplicationServices.GetService<SearchleAppConfig>();
+
       app.UseRouting();
       app.UseEndpoints(endpoints =>
       {
-        endpoints.MapGet("/", async context =>
+        endpoints.MapGet("/", async (context) =>
               {
-                await context.Response.WriteAsync("Hello World!");
+                var metadata = appConfig!.Metadata;
+                await context.Response.WriteAsync($"{metadata.ApplicationName} API Version {metadata.Version}, Environment {metadata.EnvironmentName}, Timestamp {DateTime.UtcNow}");
               });
         endpoints.MapGraphQL();
       });
