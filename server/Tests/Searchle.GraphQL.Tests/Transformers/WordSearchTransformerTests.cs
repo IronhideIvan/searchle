@@ -1,16 +1,24 @@
 using System;
 using Searchle.Dictionary.Common.Models;
 using Searchle.GraphQL.Transformers;
+using Moq;
+using Searchle.Common.Logging;
 
 namespace Searchle.GraphQL.Tests.Services
 {
   public class QueryParserServiceTests
   {
+    private Mock<IAppLoggerFactory> _mockLoggerFactory;
+
     private WordSearchTransformer _service;
 
     public QueryParserServiceTests()
     {
-      _service = new WordSearchTransformer();
+      _mockLoggerFactory = new Mock<IAppLoggerFactory>();
+      _mockLoggerFactory.Setup(m => m.Create<WordSearchTransformer>())
+        .Returns(new Mock<IAppLogger<WordSearchTransformer>>().Object);
+
+      _service = new WordSearchTransformer(_mockLoggerFactory.Object);
     }
 
     [Theory]

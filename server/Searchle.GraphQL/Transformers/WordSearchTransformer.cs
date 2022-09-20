@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Searchle.Common.Interfaces;
+using Searchle.Common.Logging;
 using Searchle.Dictionary.Common.Models;
 
 namespace Searchle.GraphQL.Transformers
@@ -8,6 +9,13 @@ namespace Searchle.GraphQL.Transformers
   public class WordSearchTransformer : IObjectTransformer<string, LexicalSearch>
   {
     private const string QUERY_CLAUSE_SEPARATOR = ":";
+
+    private IAppLogger<WordSearchTransformer> _logger;
+
+    public WordSearchTransformer(IAppLoggerFactory loggerFactory)
+    {
+      _logger = loggerFactory.Create<WordSearchTransformer>();
+    }
 
     /*
       example query with explanations:
