@@ -1,12 +1,8 @@
 using Searchle.GraphQL.Schema;
-using Searchle.Dictionary.Business.Services;
 using Searchle.Dictionary.Common.Interfaces;
 using Wordnet.Data;
-using Wordnet.Data.Dao;
 using Searchle.DataAccess.Postgres;
 using Searchle.GraphQL.Resolvers;
-using NetCore.AutoRegisterDi;
-using System.Reflection;
 using Searchle.GraphQL.Filters;
 using Searchle.GraphQL.Logging;
 using Searchle.Common.Logging;
@@ -44,9 +40,13 @@ namespace Searchle.GraphQL.ApplicationStartup
       {
         var appConfig = services.LoadConfiguration(startupLoggerFactory.Create<Startup>(), _environment);
 
+        // Initialize a new logger factory using the real configuration.
+        startupLoggerFactory = new SerilogLoggerFactory(appConfig.Logging!);
+        logger = startupLoggerFactory.Create<Startup>();
+
         // Add loggers
         services.AddSingleton<IAppLoggerFactory, SerilogLoggerFactory>();
-        services.AddDomainServices();
+        services.AddDomainServices(startupLoggerFactory.Create<Startup>());
 
         // Data providers
         services.AddTransient<IDictionaryDataProvider, WordnetDataProvider>(f =>
