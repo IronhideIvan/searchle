@@ -12,17 +12,30 @@ namespace Searchle.GraphQL.ApplicationStartup
   public class Startup
   {
     private IWebHostEnvironment _environment;
+    private IConfiguration _rootConfig;
 
-    public Startup(IWebHostEnvironment environment)
+    public Startup(IWebHostEnvironment environment, IConfiguration config)
     {
       _environment = environment;
+      _rootConfig = config;
     }
 
     public void ConfigureServices(IServiceCollection services)
     {
+      // Create a logger for the startup, before we have any configuration data
+      // available.
       var startupLoggerFactory = new SerilogLoggerFactory(new AppLoggingConfig
       {
-        LogLevel = AppLogLevel.Debug
+        LogLevel = _environment.IsDevelopment() ? AppLogLevel.Debug : AppLogLevel.Error,
+        LogSinks = new LogSink[]{
+          new LogSink{
+            SinkType = LogSinkType.Console
+          },
+          new LogSink{
+            SinkType = LogSinkType.File,
+            Destination = $"./log/startup.log"
+          }
+        }
       });
 
       var logger = startupLoggerFactory.Create<Startup>();
@@ -38,7 +51,11 @@ namespace Searchle.GraphQL.ApplicationStartup
 
       try
       {
-        var appConfig = services.LoadConfiguration(startupLoggerFactory.Create<Startup>(), _environment);
+        // Register secret providers
+        services.AddApplicationSecrets(startupLoggerFactory, _environment, _rootConfig);
+
+        // Load app config
+        var appConfig = services.LoadConfiguration(startupLoggerFactory, _environment);
 
         // Initialize a new logger factory using the real configuration.
         startupLoggerFactory = new SerilogLoggerFactory(appConfig.Logging!);
@@ -46,7 +63,7 @@ namespace Searchle.GraphQL.ApplicationStartup
 
         // Add loggers
         services.AddSingleton<IAppLoggerFactory, SerilogLoggerFactory>();
-        services.AddDomainServices(startupLoggerFactory.Create<Startup>());
+        services.AddDomainServices(startupLoggerFactory);
 
         // Data providers
         services.AddTransient<IDictionaryDataProvider, WordnetDataProvider>(f =>

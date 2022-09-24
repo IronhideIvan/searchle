@@ -6,10 +6,12 @@ using Path = System.IO.Path;
 
 namespace Searchle.GraphQL.ApplicationStartup
 {
-  public static class ConfigurationLoader
+  public static class AppConfigurationStartup
   {
-    public static SearchleAppConfig LoadConfiguration(this IServiceCollection services, IAppLogger<Startup> logger, IWebHostEnvironment env)
+    public static SearchleAppConfig LoadConfiguration(this IServiceCollection services, IAppLoggerFactory loggerFactory, IWebHostEnvironment env)
     {
+      var logger = loggerFactory.Create<Startup>();
+
       string configurationPath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
       logger.Debug("Searching for configuration at {ConfigurationLocation}", configurationPath);
 
@@ -63,18 +65,15 @@ namespace Searchle.GraphQL.ApplicationStartup
       logger.Information("Successfully parsed configuration file");
 
       services.AddSingleton<SearchleAppConfig>(appConfig);
-      if (appConfig.Logging != null)
-      {
-        services.AddSingleton<AppLoggingConfig>(appConfig.Logging);
-      }
-      else
+      if (appConfig.Logging == null)
       {
         logger.Warning("No logging configuration found. Falling back to default logging configuration");
-        var loggingConfig = new AppLoggingConfig
+        appConfig.Logging = new AppLoggingConfig
         {
           LogLevel = AppLogLevel.Error
         };
       }
+      services.AddSingleton<AppLoggingConfig>(appConfig.Logging);
 
       if (appConfig.DictionaryConnectionConfig == null)
       {

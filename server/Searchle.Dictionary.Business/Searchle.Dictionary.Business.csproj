@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Searchle.Dictionary.Common\Searchle.Dictionary.Common.csproj" />
     <ProjectReference Include="..\Searchle.DataAccess.Common\Searchle.DataAccess.Common.csproj" />
     <ProjectReference Include="..\Wordnet.Data\Wordnet.Data.csproj" />
