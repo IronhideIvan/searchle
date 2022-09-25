@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Searchle.Common.Configuration;
+using Searchle.Common.Exceptions;
 using Searchle.Common.Logging;
 using Searchle.Dictionary.Business.Configuration;
 
@@ -7,14 +9,61 @@ namespace Searchle.GraphQL.ApplicationStartup
 {
   public static class SecretConfigStartup
   {
-    public static IServiceCollection AddApplicationSecrets(this IServiceCollection services, IAppLoggerFactory loggerFactory, IWebHostEnvironment env, IConfiguration rootConfig)
+    public static SecretConfiguration RegisterSecretConfig(this IServiceCollection services, IAppLoggerFactory loggerFactory, JObject baseConfig)
     {
-      var rootConfigSection = rootConfig.GetSection("Searchle").AsEnumerable();
-      services.AddSingleton<ISecretRepository, LocalEnvironmentSecretRepository>(f =>
+      var logger = loggerFactory.Create<Startup>();
+
+      var secretConfig = baseConfig?["AppConfig"]?["Secrets"]?.ToObject<SecretConfiguration>();
+      if (secretConfig == null)
       {
-        return new LocalEnvironmentSecretRepository(rootConfigSection, loggerFactory);
-      });
-      services.AddSingleton<ISecretFactory, PlaintextSecretFactory>();
+        logger.Critical("Unable to read secret configuration details within configuation file.");
+        throw new SearchleCriticalException("Unable to read secret configuration within configuration file.");
+      }
+
+      services.AddSingleton<SecretConfiguration>(secretConfig);
+      return secretConfig;
+    }
+
+    public static IServiceCollection RegisterSecretsServices(
+      this IServiceCollection services,
+      IAppLoggerFactory loggerFactory,
+      IWebHostEnvironment env,
+      IConfiguration rootConfig,
+      SecretConfiguration secretConfig
+    )
+    {
+      var logger = loggerFactory.Create<Startup>();
+      var rootConfigSection = rootConfig.GetSection("Searchle").AsEnumerable();
+
+      // Initialize the secret source
+      if (secretConfig.Source == SecretSource.Environment)
+      {
+        services.AddSingleton<ISecretRepository, LocalEnvironmentSecretRepository>(f =>
+        {
+          return new LocalEnvironmentSecretRepository(rootConfigSection, loggerFactory);
+        });
+      }
+      else
+      {
+        throw new NotImplementedException();
+      }
+
+      // Initialize the secret factories
+      if (secretConfig.Encrypted)
+      {
+        services.AddSingleton<ISecretFactory, EncryptedSecretFactory>();
+      }
+      else if (env.IsDevelopment())
+      {
+        services.AddSingleton<ISecretFactory, PlaintextSecretFactory>();
+      }
+      else
+      {
+        logger.Critical("Invalid Encryption option for application secrets. Secrets can only be set to 'Not Encrypted' if the application is running on a development environment.");
+        throw new SearchleCriticalException("Invalid Encryption option for application secrets. Secrets can only be set to 'Not Encrypted' if the application is running on a development environment.");
+      }
+
+      // Initialize the JSON converter, so that we can accurately parse secret values
       services.AddTransient<Newtonsoft.Json.JsonConverter<ISecret>, SecretJsonConverter>();
       var serviceProvider = services.BuildServiceProvider();
 

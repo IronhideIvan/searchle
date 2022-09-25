@@ -8,7 +8,7 @@ namespace Searchle.GraphQL.ApplicationStartup
 {
   public static class AppConfigurationStartup
   {
-    public static SearchleAppConfig LoadConfiguration(this IServiceCollection services, IAppLoggerFactory loggerFactory, IWebHostEnvironment env)
+    public static JObject LoadConfiguration(this IServiceCollection services, IAppLoggerFactory loggerFactory, IWebHostEnvironment env)
     {
       var logger = loggerFactory.Create<Startup>();
 
@@ -55,16 +55,37 @@ namespace Searchle.GraphQL.ApplicationStartup
         logger.Debug("No environment specific configuration detected. Path searched: {EnvironmentConfigurationLocation}", environmentConfigPath);
       }
 
+      return baseConfig;
+    }
+
+    public static SearchleAppConfig RegisterAppConfig(this IServiceCollection services, IAppLoggerFactory loggerFactory, JObject baseConfig)
+    {
+      var logger = loggerFactory.Create<Startup>();
+
       var appConfig = baseConfig?["AppConfig"]?.ToObject<SearchleAppConfig>();
       if (appConfig == null)
       {
-        logger.Critical("Unable to read application configuration details within configuation file. File located in {ConfigurationLocation}", configurationPath);
+        logger.Critical("Unable to read application configuration details within configuation file.");
         throw new SearchleCriticalException("Unable to read application configuration within configuration file.");
       }
 
       logger.Information("Successfully parsed configuration file");
 
       services.AddSingleton<SearchleAppConfig>(appConfig);
+
+      if (appConfig.DictionaryConnectionConfig == null)
+      {
+        logger.Critical("Unable to find dictionary connection details in configuation file.");
+        throw new SearchleCriticalException("Unable to find dictionary connection details in configuration file.");
+      }
+
+      return appConfig;
+    }
+
+    public static IServiceCollection RegisterLoggingConfig(this IServiceCollection services, IAppLoggerFactory loggerFactory, SearchleAppConfig appConfig)
+    {
+      var logger = loggerFactory.Create<Startup>();
+
       if (appConfig.Logging == null)
       {
         logger.Warning("No logging configuration found. Falling back to default logging configuration");
@@ -75,13 +96,7 @@ namespace Searchle.GraphQL.ApplicationStartup
       }
       services.AddSingleton<AppLoggingConfig>(appConfig.Logging);
 
-      if (appConfig.DictionaryConnectionConfig == null)
-      {
-        logger.Critical("Unable to find dictionary connection details in configuation file. File located in {ConfigurationLocation}", configurationPath);
-        throw new SearchleCriticalException("Unable to find dictionary connection details in configuration file.");
-      }
-
-      return appConfig;
+      return services;
     }
   }
 }

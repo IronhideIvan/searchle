@@ -51,11 +51,16 @@ namespace Searchle.GraphQL.ApplicationStartup
 
       try
       {
+        // Load base configuration
+        var baseConfig = services.LoadConfiguration(startupLoggerFactory, _environment);
+
         // Register secret providers
-        services.AddApplicationSecrets(startupLoggerFactory, _environment, _rootConfig);
+        var secretConfig = services.RegisterSecretConfig(startupLoggerFactory, baseConfig);
+        services.RegisterSecretsServices(startupLoggerFactory, _environment, _rootConfig, secretConfig);
 
         // Load app config
-        var appConfig = services.LoadConfiguration(startupLoggerFactory, _environment);
+        var appConfig = services.RegisterAppConfig(startupLoggerFactory, baseConfig);
+        services.RegisterLoggingConfig(startupLoggerFactory, appConfig);
 
         // Initialize a new logger factory using the real configuration.
         startupLoggerFactory = new SerilogLoggerFactory(appConfig.Logging!);
