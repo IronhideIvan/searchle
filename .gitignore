@@ -1,6 +1,6 @@
 # Local files
 .DS_Store
-secrets.json
+secrets.*json
 
 # Mac
 **/._*

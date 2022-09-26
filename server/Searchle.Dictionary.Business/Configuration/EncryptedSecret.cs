@@ -47,7 +47,7 @@ namespace Searchle.Dictionary.Business.Configuration
       var passwordValue = await _secretRepository.FetchSecretValueAsync(_passwordKey);
 
       var encryptedValueBytes = Convert.FromBase64String(encryptedValue);
-      var passwordBytes = Convert.FromBase64String(encryptedValue);
+      var passwordBytes = System.Text.Encoding.UTF8.GetBytes(passwordValue);
 
       var encryptionUtil = new AesEncryption();
       var rawValueBytes = await encryptionUtil.DecryptAsync(encryptedValueBytes, passwordBytes);
