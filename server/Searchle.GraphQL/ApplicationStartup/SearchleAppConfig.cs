@@ -1,4 +1,5 @@
 using System;
+using Searchle.Common.Configuration;
 using Searchle.Common.Logging;
 using Searchle.DataAccess.Postgres;
 
@@ -9,5 +10,6 @@ namespace Searchle.GraphQL.ApplicationStartup
     public AppMetadata Metadata { get; set; } = new AppMetadata();
     public AppLoggingConfig? Logging { get; set; }
     public PostgresConnectionConfig? DictionaryConnectionConfig { get; set; }
+    public SecretConfiguration? Secrets { get; set; }
   }
 }

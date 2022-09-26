@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using Dapper;
 using Npgsql;
+using Searchle.Common.Exceptions;
 using Searchle.Common.Logging;
 using Searchle.DataAccess.Common.Interfaces;
 
@@ -21,8 +22,11 @@ namespace Searchle.DataAccess.Postgres
     public async Task<IEnumerable<T>> QueryAsync<T>(IQuery<T> query)
     {
       var sql = query.BuildQuery();
+      var cnnString = _config.ConnectionString != null
+        ? await _config.ConnectionString.GetValueAsync()
+        : throw new SearchleCriticalException("No connection string provided.");
 
-      using (var cnn = new NpgsqlConnection(_config.ConnectionString))
+      using (var cnn = new NpgsqlConnection(cnnString))
       {
         cnn.Open();
         _logger.Debug("Executing SQL Statement '{sql}'", sql);

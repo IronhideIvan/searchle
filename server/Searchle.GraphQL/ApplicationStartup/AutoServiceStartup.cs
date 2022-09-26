@@ -7,10 +7,12 @@ using Wordnet.Data.Dao;
 
 namespace Searchle.GraphQL.ApplicationStartup
 {
-  public static class ServiceScanner
+  public static class AutoServiceStartup
   {
-    public static IServiceCollection AddDomainServices(this IServiceCollection services, IAppLogger<Startup> logger)
+    public static IServiceCollection AddDomainServices(this IServiceCollection services, IAppLoggerFactory loggerFactory)
     {
+      var logger = loggerFactory.Create<Startup>();
+
       var assembliesToScan = new[]{
         Assembly.GetExecutingAssembly(),
         Assembly.GetAssembly(typeof(LexicalWordService)),

@@ -105,8 +105,10 @@ namespace Searchle.GraphQL.Logging
             break;
 
           case AppLogLevel.Error:
-          case AppLogLevel.Critical:
             _logger.Error(ex, logMessage, newProps);
+            break;
+          case AppLogLevel.Critical:
+            _logger.Fatal(ex, logMessage, newProps);
             break;
 
           default:

@@ -1,5 +1,6 @@
 # Local files
 .DS_Store
+secrets.*json
 
 # Mac
 **/._*
@@ -7,6 +8,7 @@
 # C#
 **/bin/**
 **/obj/**
+**/log
 
 # VS Code Extensions
 *.session.sql

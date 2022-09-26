@@ -7,18 +7,19 @@ namespace Searchle.GraphQL.Logging
   {
     private AppLoggingConfig _config;
     private Serilog.ILogger _logger;
+    private Serilog.LoggerConfiguration _serilogConfig;
 
     public SerilogLoggerFactory(AppLoggingConfig config)
     {
       _config = config;
 
-      var serilogConfig = GetLoggerConfiguration(config);
-      _logger = serilogConfig.CreateLogger();
+      _serilogConfig = GetLoggerConfiguration(config);
+      _logger = _serilogConfig.CreateLogger();
     }
 
     public IAppLogger<T> Create<T>()
     {
-      return new SerilogLogger<T>(_config, _logger);
+      return new SerilogLogger<T>(_config, _logger.ForContext<T>());
     }
 
     private LoggerConfiguration GetLoggerConfiguration(AppLoggingConfig config)
@@ -37,8 +38,10 @@ namespace Searchle.GraphQL.Logging
           serilogConfig = serilogConfig.MinimumLevel.Warning();
           break;
         case AppLogLevel.Error:
-        case AppLogLevel.Critical:
           serilogConfig = serilogConfig.MinimumLevel.Error();
+          break;
+        case AppLogLevel.Critical:
+          serilogConfig = serilogConfig.MinimumLevel.Fatal();
           break;
         default:
           throw new NotImplementedException($"Unknown {nameof(AppLogLevel)}.{config.LogLevel}");
