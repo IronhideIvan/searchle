@@ -43,6 +43,11 @@ namespace Searchle.GraphQL.ApplicationStartup
           return new LocalEnvironmentSecretRepository(rootConfigSection, loggerFactory);
         });
       }
+      // Should never really be used, but useful for development and testing purposes
+      else if (secretConfig.Source == SecretSource.None)
+      {
+        services.AddSingleton<ISecretRepository, PlainAsDaySecretRepository>();
+      }
       else
       {
         throw new NotImplementedException();
