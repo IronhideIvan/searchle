@@ -1,13 +1,13 @@
 # Local files
 .DS_Store
-secrets.*json
+**/dev
 
 # Mac
 **/._*
 
 # C#
-**/bin/**
-**/obj/**
+**/bin
+**/obj
 **/log
 
 # VS Code Extensions
