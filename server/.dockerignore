@@ -1,0 +1,7 @@
+# Ignore everything
+# *
+
+# Include C# related files
+!src/**/*.cs
+!src/**/*.csproj
+!src/**/appsettings.*json
