@@ -6,9 +6,9 @@
         "type": "coreclr",
         "request": "launch",
         "preLaunchTask": "build-searchle-graphql",
-        "program": "${workspaceFolder}/server/Searchle.GraphQL/bin/Debug/net6.0/Searchle.GraphQL.dll",
+        "program": "${workspaceFolder}/server/src/Searchle.GraphQL/bin/Debug/net6.0/Searchle.GraphQL.dll",
         "args": [],
-        "cwd": "${workspaceFolder}/server/Searchle.GraphQL",
+        "cwd": "${workspaceFolder}/server/src/Searchle.GraphQL",
         "stopAtEntry": false,
         "serverReadyAction": {
             "action": "openExternally",
