@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Searchle.GraphQL\Searchle.GraphQL.csproj" />
-    <ProjectReference Include="..\..\Searchle.Dictionary.Common\Searchle.Dictionary.Common.csproj" />
+    <ProjectReference Include="..\..\src\Searchle.GraphQL\Searchle.GraphQL.csproj" />
+    <ProjectReference Include="..\..\src\Searchle.Dictionary.Common\Searchle.Dictionary.Common.csproj" />
   </ItemGroup>
 
 </Project>
