@@ -1,5 +1,21 @@
 Searchle Backend
 
+## Building and Running in Docker
+
+From the `server/` directory, run the following command to build a docker image:
+
+```
+docker build -f webapi.Dockerfile -t searchle/server:1.0.alpha .  
+```
+
+Now run the following command to start a new container using the image:
+
+```
+docker run -d -p 8080:80 --name searchle-server searchle/server:1.0.alpha
+```
+
+Open a browser and navigate to localhost:8080 and you should see the API up and running!
+
 ## Setting Secrets on a Development Environment
 
 In order to set application secrets locally, we will use the [dotnet secrets manager](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#set-multiple-secrets). 
