@@ -1,3 +1,17 @@
+## Docker Compose
+
+To start up the application, execute the following:
+
+```
+docker-compose up
+```
+
+or, if you have a specific environment file you'd like to use. Execute something like
+
+```
+docker-compose --env-file ./dev/dev.env up
+```
+
 ## Postgres
 
 ### Main Commands
