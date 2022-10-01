@@ -1,0 +1,8 @@
+# ignore node_modules and build generated folders
+node_modules
+.next
+next-env.d.ts
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db

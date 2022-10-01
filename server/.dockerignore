@@ -1,7 +1,13 @@
-# Ignore everything
-# *
+**/bin
+**/obj
+**/*.md
+.dockerignore
+**/*.Dockerfile
+**/.gitignore
+build-config
+tests
 
-# Include C# related files
-!src/**/*.cs
-!src/**/*.csproj
-!src/**/appsettings.*json
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db

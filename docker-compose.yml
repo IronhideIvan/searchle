@@ -10,3 +10,10 @@ services:
       - Searchle:DictionaryConnectionString=${DICTIONARY_CNN_STRING}
       - Searchle:RootKey=${ROOT_KEY}
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+  frontend:
+    image: searchle/frontend:latest
+    build:
+      context: frontend/src
+      dockerfile: frontend.Dockerfile
+    ports:
+      - 4000:3000

@@ -25,6 +25,7 @@ if(process.env.NODE_ENV === 'development') {
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  output: 'standalone',
   async rewrites() {
     return rewriteRules;
   }
