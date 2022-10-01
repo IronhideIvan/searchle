@@ -10,7 +10,7 @@ const ResponsiveModal = ({ children, ...props }: Props) => {
   const [screenWidth, setScreenWidth] = useState<number>(0);
   React.useEffect(() => {
     setScreenWidth(window.innerWidth);
-  })
+  }, [])
 
   return (
     <Modal

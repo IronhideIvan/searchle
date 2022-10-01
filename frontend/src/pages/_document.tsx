@@ -4,9 +4,15 @@ import { CssBaseline, styled } from '@nextui-org/react';
 
 const MyBody = styled('body',
   {
-    backgroundColor: "$background"
+    backgroundColor: "$background",
+    background: "$background",
+    color: "$foreground"
   }
 );
+
+const MyHtml = styled('html', {
+  colorScheme: "$colorScheme"
+});
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -19,13 +25,13 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="en">
+      <MyHtml lang="en">
         <Head>{CssBaseline.flush()}</Head>
         <MyBody>
           <Main />
           <NextScript />
         </MyBody>
-      </Html>
+      </MyHtml>
     );
   }
 }

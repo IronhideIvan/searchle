@@ -15,7 +15,7 @@ const WordPuzzleHelp = (props: Props) => {
         What is Searchle?
       </Text>
       <Text>
-        Searchle is a tool to help you solve those pesky words you just can't figure out when solving a
+        Searchle is a tool to help you solve those pesky words you just can&apos;t figure out when solving a
         word puzzle game like <Text b>Wordle</Text>.
       </Text>
       <Text h2>
@@ -23,7 +23,7 @@ const WordPuzzleHelp = (props: Props) => {
       </Text>
       <Text>
         It sort of functions like a dictionary, just with a very specific way of searching for words.
-        To get started, type out a 5 letter word. For example, let's put in:
+        To get started, type out a 5 letter word. For example, let&apos;s put in:
       </Text>
       <WordPuzzleGuessWord
         index={0}
@@ -56,7 +56,7 @@ const WordPuzzleHelp = (props: Props) => {
         ]}
       />
       <Text className={styles.topMargin}>
-        If you perform a search now you will be given a list of words that don't contain any of the
+        If you perform a search now you will be given a list of words that don&apos;t contain any of the
         letters in the word. Why? Because the default status of a letter (which you can identify from the
         black background) means that this letter does not exist in the word. If we want to change the status,
         we can do so by clicking on a letter to cycle it between three possible statuses. Now, what are the
@@ -95,7 +95,7 @@ const WordPuzzleHelp = (props: Props) => {
       <Text>
         <Text small>
           Green. This color means that this letter both exists in the word and is in the correct position.
-          Using our example, it means that our word starts with the letter "D".
+          Using our example, it means that our word starts with the letter &quot;D&quot;.
         </Text>
       </Text>
       <WordPuzzleGuessWord
@@ -131,7 +131,7 @@ const WordPuzzleHelp = (props: Props) => {
       <Text>
         <Text small>
           Yellow. This color means that the letter exists in the word, but it is not in the correct
-          position. In our example it means that the letter "E" is in our word, but it's not the last
+          position. In our example it means that the letter &quot;E&quot; is in our word, but it&apos;s not the last
           letter of our word.
         </Text>
       </Text>
@@ -168,11 +168,11 @@ const WordPuzzleHelp = (props: Props) => {
       <Text>
         <Text small>
           Black. This color means that the letter does not exist in the word. In our example, this
-          means that the letter "V" is not in any part of our word.
+          means that the letter &quot;V&quot; is not in any part of our word.
         </Text>
       </Text>
       <Text>
-        Once you've set the status for all of your letters you can go ahead and hit the search button
+        Once you&apos;ve set the status for all of your letters you can go ahead and hit the search button
         to see what words this could possibly be.
       </Text>
       <Text b>

@@ -25,7 +25,10 @@ export const DarkTheme = createTheme({
       puzzleTileBorder: "rgb(222, 240, 255, .3)",
       keyboardBackground: "none",
       keyboardKeyBackground: "$gray500",
-      keyboardKeyTextColor: "$gray900"
+      keyboardKeyTextColor: "$gray900",
+
+      colorScheme: "dark"
+
     },
     space: {},
     fonts: {}
