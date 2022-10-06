@@ -10,7 +10,7 @@ const MyBody = styled('body',
   }
 );
 
-const MyHtml = styled('html', {
+const MyHtml = styled(Html, {
   colorScheme: "$colorScheme"
 });
 
