@@ -42,7 +42,7 @@ namespace Searchle.GraphQL.ApplicationStartup
       {
         services.AddSingleton<ISecretRepository, LocalEnvironmentSecretRepository>(f =>
         {
-          return new LocalEnvironmentSecretRepository(rootConfigSection, loggerFactory);
+          return new LocalEnvironmentSecretRepository(rootConfigSection);
         });
       }
       // Should never really be used, but useful for development and testing purposes
