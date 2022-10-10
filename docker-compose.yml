@@ -1,4 +1,16 @@
 services:
+  db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PW}
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/lib/postgresql/data 
+    networks:
+      - backend
   server:
     image: searchle/server:latest
     build:
