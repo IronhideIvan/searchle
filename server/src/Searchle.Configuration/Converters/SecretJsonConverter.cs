@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using Searchle.Common.Configuration;
+using Searchle.Configuration.Interfaces;
 
-namespace Searchle.Dictionary.Business.Configuration
+namespace Searchle.Configuration.Converters
 {
   public class SecretJsonConverter : Newtonsoft.Json.JsonConverter<ISecret>
   {

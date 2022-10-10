@@ -1,8 +1,7 @@
 using System;
-using Searchle.Common.Configuration;
-using Searchle.Common.Logging;
+using Searchle.Configuration.Interfaces;
 
-namespace Searchle.Dictionary.Business.Configuration
+namespace Searchle.Configuration.Implementations
 {
   public class PlainAsDaySecretRepository : ISecretRepository
   {

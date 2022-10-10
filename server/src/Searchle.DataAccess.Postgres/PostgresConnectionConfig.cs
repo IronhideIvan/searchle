@@ -1,5 +1,5 @@
 using System;
-using Searchle.Common.Configuration;
+using Searchle.Configuration.Interfaces;
 
 namespace Searchle.DataAccess.Postgres
 {

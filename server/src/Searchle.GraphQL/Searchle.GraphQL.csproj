@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Searchle.DataAccess.Postgres\Searchle.DataAccess.Postgres.csproj" />
     <ProjectReference Include="..\Searchle.Dictionary.Common\Searchle.Dictionary.Common.csproj" />
     <ProjectReference Include="..\Searchle.DataAccess.Common\Searchle.DataAccess.Common.csproj" />
+    <ProjectReference Include="..\Searchle.Configuration\Searchle.Configuration.csproj" />
   </ItemGroup>
 
 </Project>

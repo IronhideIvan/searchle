@@ -1,9 +1,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Searchle.Common.Configuration;
 using Searchle.Common.Exceptions;
 using Searchle.Common.Logging;
-using Searchle.Dictionary.Business.Configuration;
+using Searchle.Configuration.Converters;
+using Searchle.Configuration.Implementations;
+using Searchle.Configuration.Interfaces;
+using Searchle.Configuration.Models;
 
 namespace Searchle.GraphQL.ApplicationStartup
 {

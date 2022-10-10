@@ -1,6 +1,4 @@
-using System;
-
-namespace Searchle.Common.Configuration
+namespace Searchle.Configuration.Models
 {
   public class SecretConfiguration
   {

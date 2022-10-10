@@ -1,5 +1,3 @@
-using System;
-using System.Data;
 using Dapper;
 using Npgsql;
 using Searchle.Common.Exceptions;

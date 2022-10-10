@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Searchle.DataAccess.Common\Searchle.DataAccess.Common.csproj" />
+    <ProjectReference Include="..\Searchle.Configuration\Searchle.Configuration.csproj" />
   </ItemGroup>
 
 </Project>

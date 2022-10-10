@@ -1,6 +1,6 @@
 using System;
-using Searchle.Common.Configuration;
 using Searchle.Common.Logging;
+using Searchle.Configuration.Models;
 using Searchle.DataAccess.Postgres;
 
 namespace Searchle.GraphQL.ApplicationStartup

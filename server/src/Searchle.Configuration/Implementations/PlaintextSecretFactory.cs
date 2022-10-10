@@ -1,6 +1,6 @@
-using Searchle.Common.Configuration;
+using Searchle.Configuration.Interfaces;
 
-namespace Searchle.Dictionary.Business.Configuration
+namespace Searchle.Configuration.Implementations
 {
   public class PlaintextSecretFactory : ISecretFactory
   {

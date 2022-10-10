@@ -1,6 +1,7 @@
-using Searchle.Common.Configuration;
+using Searchle.Configuration.Interfaces;
+using Searchle.Configuration.Models;
 
-namespace Searchle.Dictionary.Business.Configuration
+namespace Searchle.Configuration.Implementations
 {
   public class EncryptedSecretFactory : ISecretFactory
   {
