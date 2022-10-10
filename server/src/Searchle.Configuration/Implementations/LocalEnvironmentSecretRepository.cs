@@ -1,5 +1,4 @@
 using System;
-using Searchle.Common.Logging;
 using Searchle.Configuration.Interfaces;
 
 namespace Searchle.Configuration.Implementations
