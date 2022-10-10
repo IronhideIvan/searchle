@@ -17,4 +17,8 @@
     <PackageReference Include="Npgsql" Version="5.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\server\src\Searchle.Configuration\Searchle.Configuration.csproj" />
+  </ItemGroup>
+
 </Project>

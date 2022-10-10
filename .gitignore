@@ -1,4 +1,5 @@
 # Local files
+/volumes
 .DS_Store
 **/dev
 

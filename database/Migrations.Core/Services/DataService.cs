@@ -17,16 +17,15 @@ namespace Migrations.Core.Services
       cnnConfigs = appConfig.Connections;
     }
 
-    public string GetConnectionString()
+    public async Task<string> GetConnectionStringAsync()
     {
       var cnnConfig = cnnConfigs.First();
-      string cnnString = $"Server={cnnConfig.Server};Port={cnnConfig.Port};Database={cnnConfig.Database};User Id={cnnConfig.Username};Password={cnnConfig.Password};";
-      return cnnString;
+      return await cnnConfig.ConnectionString.GetValueAsync();
     }
 
     public async Task<IDbConnection> ConnectAsync()
     {
-      string cnnString = GetConnectionString();
+      string cnnString = await GetConnectionStringAsync();
 
       var cnn = new NpgsqlConnection(cnnString);
       await cnn.OpenAsync();

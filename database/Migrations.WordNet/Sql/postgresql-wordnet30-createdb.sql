@@ -3,6 +3,7 @@
 --
 CREATE USER wordnet30_admin WITH SUPERUSER password 'password!1';
 CREATE USER wordnet30_appusr WITH SUPERUSER password 'password!1';
+CREATE USER wordnet30_migrator WITH SUPERUSER password 'password!1';
 
 --
 -- Name: wordnet30; Type: DATABASE; Schema: -; Owner: -
