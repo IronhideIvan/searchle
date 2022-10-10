@@ -9,11 +9,8 @@ namespace Searchle.Configuration.Implementations
     private Dictionary<string, string> _configValues = new Dictionary<string, string>();
 
     public LocalEnvironmentSecretRepository(
-      IEnumerable<KeyValuePair<string, string>> configValues,
-      IAppLoggerFactory loggerFactory)
+      IEnumerable<KeyValuePair<string, string>> configValues)
     {
-      var logger = loggerFactory.Create<LocalEnvironmentSecretRepository>();
-      logger.Debug("Identified configuration keys: {ConfigKey}", configValues.ToList().Select(v => v.Key));
       foreach (var val in configValues)
       {
         _configValues.Add(val.Key, val.Value);
