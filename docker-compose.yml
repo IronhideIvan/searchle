@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PW}
+    ports:
+      - 5432:5432
+    volumes:
+      - dictionary:/var/lib/postgresql/data 
+    networks:
+      - backend
+  server:
+    image: searchle/server:latest
+    build:
+      context: server
+      dockerfile: webapi.Dockerfile
+    ports:
+      - 8080:80
+    environment:
+      - Searchle:DictionaryConnectionString=${DICTIONARY_CNN_STRING}
+      - Searchle:RootKey=${ROOT_KEY}
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+    networks:
+      - backend
+  frontend:
+    image: searchle/frontend:latest
+    build:
+      context: frontend/src
+      dockerfile: frontend.Dockerfile
+    ports:
+      - 4000:3000
+    networks:
+      - frontend
+  reverse-proxy:
+    image: nginx:1.23.1
+    depends_on:
+      - server
+      - frontend
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - backend
+      - frontend
+networks:
+  frontend:
+  backend:
+volumes:
+  dictionary:

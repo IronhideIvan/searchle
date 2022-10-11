@@ -6,7 +6,7 @@ namespace Migrations.Core.Interfaces
 {
   public interface IDataService
   {
-    string GetConnectionString();
+    Task<string> GetConnectionStringAsync();
     Task<IDbConnection> ConnectAsync();
   }
 }

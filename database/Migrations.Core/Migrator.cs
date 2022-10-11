@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Migrations.Core.Interfaces;
-using Migrations.Core.Services;
 
 namespace Migrations.Core
 {
-  public class Migrator
+  public class Migrator<T> where T : class
   {
     public async Task Run(params Assembly[] migrationAssemblies)
     {
       try
       {
-        var startup = new Startup(migrationAssemblies);
+        var startup = new Startup<T>(migrationAssemblies);
         var host = startup.AppStartup();
 
         using (var scope = host.Services.CreateScope())
         {
           var databaseMigrator = scope.ServiceProvider.GetRequiredService<IDataaseMigrator>();
-          var logger = scope.ServiceProvider.GetRequiredService<ILogger<Migrator>>();
+          var logger = scope.ServiceProvider.GetRequiredService<ILogger<Migrator<T>>>();
 
           try
           {
@@ -35,7 +33,6 @@ namespace Migrations.Core
             logger.LogCritical(message);
           }
         }
-
       }
       catch (Exception ex)
       {

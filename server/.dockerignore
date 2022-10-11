@@ -1,0 +1,13 @@
+**/bin
+**/obj
+**/*.md
+.dockerignore
+**/*.Dockerfile
+**/.gitignore
+build-config
+tests
+
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db

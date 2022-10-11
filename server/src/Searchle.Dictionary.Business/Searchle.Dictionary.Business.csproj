@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Searchle.Dictionary.Common\Searchle.Dictionary.Common.csproj" />
+    <ProjectReference Include="..\Searchle.DataAccess.Common\Searchle.DataAccess.Common.csproj" />
+    <ProjectReference Include="..\Wordnet.Data\Wordnet.Data.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
