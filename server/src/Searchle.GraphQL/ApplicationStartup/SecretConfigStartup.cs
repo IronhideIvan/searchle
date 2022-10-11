@@ -60,14 +60,9 @@ namespace Searchle.GraphQL.ApplicationStartup
       {
         services.AddSingleton<ISecretFactory, EncryptedSecretFactory>();
       }
-      else if (env.IsDevelopment())
-      {
-        services.AddSingleton<ISecretFactory, PlaintextSecretFactory>();
-      }
       else
       {
-        logger.Critical("Invalid Encryption option for application secrets. Secrets can only be set to 'Not Encrypted' if the application is running on a development environment.");
-        throw new SearchleCriticalException("Invalid Encryption option for application secrets. Secrets can only be set to 'Not Encrypted' if the application is running on a development environment.");
+        services.AddSingleton<ISecretFactory, PlaintextSecretFactory>();
       }
 
       // Initialize the JSON converter, so that we can accurately parse secret values
