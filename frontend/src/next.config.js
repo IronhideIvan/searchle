@@ -54,8 +54,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   output: 'standalone',
-  basePath: hasAssetPath ? nextAssetPath : undefined,
-  assetPath: hasAssetPath ? nextAssetPath.concat('/') : undefined,
+  // basePath: hasAssetPath ? nextAssetPath : undefined,
+  // assetPath: hasAssetPath ? nextAssetPath.concat('/') : undefined,
   async rewrites() {
     return rewriteRules;
   }
