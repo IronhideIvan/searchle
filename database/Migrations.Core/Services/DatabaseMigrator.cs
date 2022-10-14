@@ -1,5 +1,6 @@
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using FluentMigrator.Runner;
@@ -61,8 +62,36 @@ namespace Migrations.Core.Services
 
             try
             {
-              var script = await File.ReadAllTextAsync(tempPath);
-              await cnn.ExecuteAsync(script);
+              // For massive files we need to read them from a stream in order to
+              // prevent any memory exceptions
+              using (var fs = new FileStream(tempPath, FileMode.Open))
+              {
+                using (var sr = new StreamReader(fs))
+                {
+                  var block = new StringBuilder();
+                  string line = await sr.ReadLineAsync();
+                  int statementCount = 0;
+                  while (line != null)
+                  {
+                    block.AppendLine(line);
+                    if (line.EndsWith(";"))
+                    {
+                      statementCount += 1;
+                    }
+                    if (statementCount > 1000)
+                    {
+                      await cnn.ExecuteAsync(block.ToString());
+                      block.Clear();
+                      statementCount = 0;
+                    }
+                    line = await sr.ReadLineAsync();
+                  }
+                  if (statementCount > 0)
+                  {
+                    await cnn.ExecuteAsync(block.ToString());
+                  }
+                }
+              }
             }
             catch (Exception ex)
             {
