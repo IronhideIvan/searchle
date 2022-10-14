@@ -5,13 +5,13 @@ Searchle Backend
 From the `server/` directory, run the following command to build a docker image:
 
 ```
-docker build -f webapi.Dockerfile -t searchle/server:1.0.alpha .  
+docker build -f webapi.Dockerfile -t searchle/latest .  
 ```
 
 Now run the following command to start a new container using the image:
 
 ```
-docker run -d -p 8080:80 --name searchle-server searchle/server:1.0.alpha
+docker run -d -p 8080:80 --name searchle-server searchle/latest
 ```
 
 Open a browser and navigate to localhost:8080 and you should see the API up and running!
